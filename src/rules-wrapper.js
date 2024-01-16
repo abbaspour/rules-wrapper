@@ -10,7 +10,7 @@ function mapToContext(event) {
         stats: {
             loginsCount: event?.stats?.logins_count
         },
-        connectionID: event?.connection.id,
+        connectionID: event?.connection?.id,
         connectionMetadata: event?.connection?.metadata,
         connection: event?.connection?.name,
         connectionStrategy: event?.connection?.strategy,
@@ -94,7 +94,21 @@ function mapToUser(event) {
 }
 
 function callApi(result, params) {
-    // TODO
+    //console.log(result);
+    //console.log(params);
+
+    const {
+        user,
+        context
+    } = result;
+    const {
+        event,
+        api
+    } = params;
+
+    if (context?.primaryUser) {
+        api.authentication.setPrimaryUserId(context.primaryUser);
+    }
 }
 
 exports.execute = (rules, params) => {
@@ -102,6 +116,7 @@ exports.execute = (rules, params) => {
         event,
         api
     } = params;
+
     const clonedEvent = _.cloneDeep(event);
 
     const context = mapToContext(clonedEvent);
@@ -118,7 +133,7 @@ exports.execute = (rules, params) => {
             return;
         }
 
-        callApi(result, params);
+        callApi({user, context}, params);
     });
 };
 
