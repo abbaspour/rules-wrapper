@@ -106,6 +106,16 @@ function diffAndCallApi(initialUser, user, initialContext, context, api) {
 
     // -- ID Token --
     _.forEach(context?.idToken, (v, k) => api.idToken.setCustomClaim(k, v));
+
+    // -- Redirection --
+    if (context?.redirect?.url) {
+        // TODO: we should be in post-login and not continue
+        api.redirect.sendUserTo(context.redirect.url);
+    }
+
+    // -- SAML --
+
+
 }
 
 exports.execute = (rules, params) => {
