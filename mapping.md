@@ -16,7 +16,8 @@ onExecutePostLogin = (event, api) => {
 # Context Mapping
 
 ## Attributes
-> NOTE: event fields are `camelCased` and context fields are `snake_cased`.
+
+> NOTE: event fields are `snake_cased` and context fields are `cameCased`.
 
 | Action `event`                   | Rules `context`       |
 |:---------------------------------|:----------------------|
@@ -55,10 +56,12 @@ onExecutePostLogin = (event, api) => {
 
 ## Attributes
 
-| Action `event`     | Rules `user`      |
-|:-------------------|:------------------|
-| `.user`            | `.`               |
-| `.client.clent_id` | `.clientID`  TBC? |
+| Action `event`          | Rules `user`        |
+|:------------------------|:--------------------|
+| `.user`                 | `.`                 |
+| `.client.clent_id`      | `.clientID`  TBC?   |
+| ?                       | `.global_client_id` |
+| `.identities.[].userId` | -                   | 
 
 ## Methods
 

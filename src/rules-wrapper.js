@@ -2,13 +2,14 @@ const async = require('async');
 const _ = require('lodash');
 
 function mapToContext(event) {
-    // TODO: camelCase to snake_case
     const context = {
+        authentication: event?.authentication,
         riskAssessment: event?.authentication?.riskAssessment,
         request: event?.request,
         authorization: event?.authorization,
-        authentication: event?.authentication,
-        stats: event?.stats,
+        stats: {
+            loginsCount: event?.stats?.logins_count
+        },
         connectionID: event?.connection.id,
         connectionMetadata: event?.connection?.metadata,
         connection: event?.connection?.name,
@@ -19,17 +20,49 @@ function mapToContext(event) {
         tenant: event?.tenant?.id,
         protocol: event?.transaction?.protocol,
         locale: event?.transaction?.locale,
-        configuration: event?.secrets,
         // TBC
-        jwtConfiguration: {},
-        sso: {},
+        jwtConfiguration: {}, // TODO
+        // TODO sso: {},
         // placeholder for api
+        connectionOptions: {},
         accessToken: {},
         idToken: {},
         samlConfiguration: {},
-        multifactor: {},
-        redirect: {}
+        // TODO multifactor: {},
+        // TODO redirect: {}
     };
+
+    delete (context?.authentication?.riskAssessment);
+
+    if (event?.request?.user_agent) {
+        context.request.userAgent = event.request.user_agent;
+        delete (context?.request?.user_agent);
+    }
+
+    if (event?.request?.geoip) {
+        context.request.geoip.city_name = event.request.geoip?.cityName;
+        context.request.geoip.continent_code = event.request.geoip?.continentCode;
+        context.request.geoip.country_code = event.request.geoip?.countryCode;
+        context.request.geoip.country_code3 = event.request.geoip?.countryCode3;
+        context.request.geoip.country_name = event.request.geoip?.countryName;
+        context.request.geoip.subdivision_code = event.request.geoip?.subdivisionCode;
+        context.request.geoip.subdivision_name = event.request.geoip?.subdivisionName;
+        context.request.geoip.time_zone = event.request.geoip?.timeZone;
+        delete (context.request.geoip?.cityName);
+        delete (context.request.geoip?.continentCode);
+        delete (context.request.geoip?.countryCode);
+        delete (context.request.geoip?.countryCode3);
+        delete (context.request.geoip?.countryName);
+        delete (context.request.geoip?.subdivisionCode);
+        delete (context.request.geoip?.subdivisionName);
+        delete (context.request.geoip?.timeZone);
+    }
+
+    if (!_.isEmpty(event?.secrets)) {
+        context.configuration = event.secrets;
+    }
+
+    _.forEach(context?.authentication?.methods, m => m.timestamp = new Date(m.timestamp).valueOf());
 
     Object.defineProperty(context, 'sessionID', {
         get: function () {
@@ -50,12 +83,14 @@ function mapToContext(event) {
 }
 
 function mapToUser(event) {
-    return {
+    const user = {
         ...event?.user,
         clientID: event?.client?.client_id,
-        app_metadata: {},
-        user_metadata: {}
     };
+
+    _.forEach(user.identities, i => delete (i.userId));
+
+    return user;
 }
 
 function callApi(result, params) {
@@ -63,8 +98,10 @@ function callApi(result, params) {
 }
 
 exports.execute = (rules, params) => {
-    const {event, api} = params;
-
+    const {
+        event,
+        api
+    } = params;
     const clonedEvent = _.cloneDeep(event);
 
     const context = mapToContext(clonedEvent);
