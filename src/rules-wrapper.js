@@ -93,22 +93,19 @@ function mapToUser(event) {
     return user;
 }
 
-function callApi(result, params) {
-    //console.log(result);
-    //console.log(params);
+function diffAndCallApi(initialUser, user, initialContext, context, api) {
 
-    const {
-        user,
-        context
-    } = result;
-    const {
-        event,
-        api
-    } = params;
-
+    // -- PrimaryUserId --
     if (context?.primaryUser) {
         api.authentication.setPrimaryUserId(context.primaryUser);
     }
+
+    // -- Access Token -- (claims and scopes)
+    _.forEach(context?.accessToken, (v, k) => api.accessToken.setCustomClaim(k, v));
+    // todo: diff scopes and call addScope() && removeScope()
+
+    // -- ID Token --
+    _.forEach(context?.idToken, (v, k) => api.idToken.setCustomClaim(k, v));
 }
 
 exports.execute = (rules, params) => {
@@ -119,8 +116,15 @@ exports.execute = (rules, params) => {
 
     const clonedEvent = _.cloneDeep(event);
 
-    const context = mapToContext(clonedEvent);
-    const user = mapToUser(clonedEvent);
+    const initialContext = mapToContext(clonedEvent);
+    const initialUser = mapToUser(clonedEvent);
+
+    const context = _.cloneDeep(initialContext);
+    const user = _.cloneDeep(initialUser);
+
+    // noinspection JSUnusedLocalSymbols
+    // eslint-disable-next-line no-unused-vars
+    const global = {};
 
     async.waterfall([
         function (callback) {
@@ -133,7 +137,7 @@ exports.execute = (rules, params) => {
             return;
         }
 
-        callApi({user, context}, params);
+        diffAndCallApi(initialUser, user, initialContext, context, api);
     });
 };
 
