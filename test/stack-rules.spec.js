@@ -4,7 +4,7 @@ const {
     expect,
     describe,
     it,
-    jest: _jest
+    jest: _jest,
 } = require('@jest/globals');
 
 describe('handle multiple rules', () => {
@@ -81,11 +81,11 @@ describe('handle multiple rules', () => {
             }
         };
 
-        const rule2 = _jest.fn();
-
         const rule1 = (user, context, callback) => {
             throw 'exception';
         };
+
+        const rule2 = _jest.fn();
 
         wrapper.execute([rule1, rule2], {
             event,
@@ -96,4 +96,36 @@ describe('handle multiple rules', () => {
         expect(rule2).not.toBeCalled();
     });
 
+});
+
+
+describe('global object', () => {
+    it('read and write global object', () => {
+        const event = {
+            user: {
+                email: 'user@example.com'
+            }
+        };
+        const api = {
+            access: {
+                deny: _jest.fn()
+            }
+        };
+
+        const rule1 = (user, context, callback) => {
+            global.x = 'y';
+            global.f = _jest.fn();
+        };
+
+        const rule2 = (user, context, callback) => {
+            expect(global.x).toBe('y');
+            global.f('param');
+            expect(global.f).toBeCalledWith('param');
+        };
+
+        wrapper.execute([rule1, rule2], {
+            event,
+            api
+        });
+    });
 });
