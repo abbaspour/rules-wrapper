@@ -10,7 +10,7 @@ function mapToContext(event) {
         stats: {
             loginsCount: event?.stats?.logins_count
         },
-        connectionID: event?.connection.id,
+        connectionID: event?.connection?.id,
         connectionMetadata: event?.connection?.metadata,
         connection: event?.connection?.name,
         connectionStrategy: event?.connection?.strategy,
@@ -93,8 +93,51 @@ function mapToUser(event) {
     return user;
 }
 
-function callApi(result, params) {
-    // TODO
+function diffAndCallApi(user, context, api) {
+
+    // -- PrimaryUserId --
+    if (context?.primaryUser) {
+        api.authentication.setPrimaryUserId(context.primaryUser);
+    }
+
+    // -- Access Token -- (claims and scopes)
+    _.forEach(context?.accessToken, (v, k) => api.accessToken.setCustomClaim(k, v));
+    // todo: diff scopes and call addScope() && removeScope()
+
+    // -- ID Token --
+    _.forEach(context?.idToken, (v, k) => api.idToken.setCustomClaim(k, v));
+
+    // -- Redirection --
+    if (context?.redirect?.url) {
+        // TODO: we should be in post-login and not continue
+        api.redirect.sendUserTo(context.redirect.url);
+    }
+
+    // -- SAML --
+
+
+}
+
+function wrap(rules) {
+    const tasks = [];
+
+    for (const r of rules) {
+        tasks.push((user, context, callback) => {
+            try {
+                r(user, context, (err) => {
+                        if (err) {
+                            callback(err);
+                        } else {
+                            callback(null, user, context);
+                        }
+                    }
+                );
+            } catch (e) {
+                callback(e);
+            }
+        });
+    }
+    return tasks;
 }
 
 exports.execute = (rules, params) => {
@@ -102,23 +145,32 @@ exports.execute = (rules, params) => {
         event,
         api
     } = params;
+
     const clonedEvent = _.cloneDeep(event);
 
-    const context = mapToContext(clonedEvent);
-    const user = mapToUser(clonedEvent);
+    const initialContext = mapToContext(clonedEvent);
+    const initialUser = mapToUser(clonedEvent);
+
+    const context = _.cloneDeep(initialContext);
+    const user = _.cloneDeep(initialUser);
+
+    // noinspection JSUnusedLocalSymbols
+    // eslint-disable-next-line no-unused-vars
+    const global = {};
 
     async.waterfall([
         function (callback) {
             callback(null, user, context);
         },
-        ...rules
-    ], function (err, result) {
+        //...rules
+        ...wrap(rules)
+    ], function (err, user, context) {
         if (err) {
             api.access.deny(err);
             return;
         }
 
-        callApi(result, params);
+        diffAndCallApi(user, context, api);
     });
 };
 
