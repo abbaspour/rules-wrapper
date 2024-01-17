@@ -5,11 +5,14 @@ const wrapper = require('@auth0/rules-wrapper');
 
 onExecutePostLogin = (event, api) => {
     const rules = [
-        rule1,
+        rule01,
         rule2
     ];
 
-    wrapper.execute(rules, {event, api});
+    wrapper.execute(rules, {
+        event,
+        api
+    });
 }
 ```
 
