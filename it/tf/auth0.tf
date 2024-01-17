@@ -20,6 +20,14 @@ resource "auth0_client" "jwt-io" {
   allowed_logout_urls = [
   ]
 
+  grant_types = [
+    "authorization_code",
+    "http://auth0.com/oauth/grant-type/password-realm",
+    "implicit",
+    "password",
+    "refresh_token"
+  ]
+
   jwt_configuration {
     alg = "RS256"
   }
@@ -39,7 +47,7 @@ resource "auth0_connection_clients" "db_clients" {
 resource "auth0_user" "user_1" {
   depends_on = [auth0_connection_clients.db_clients]
   connection_name = data.auth0_connection.db.name
-  email = "user1@atko.email"
+  email = var.user1_email
   password = var.default_password
 }
 

@@ -20,3 +20,8 @@ variable "default_password" {
   description = "password for test users"
   sensitive = true
 }
+
+variable "user1_email" {
+  type = string
+  description = "email for test users"
+}
