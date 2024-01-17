@@ -93,7 +93,7 @@ function mapToUser(event) {
     return user;
 }
 
-function diffAndCallApi(initialUser, user, initialContext, context, api) {
+function diffAndCallApi(user, context, api) {
 
     // -- PrimaryUserId --
     if (context?.primaryUser) {
@@ -118,6 +118,28 @@ function diffAndCallApi(initialUser, user, initialContext, context, api) {
 
 }
 
+function wrap(rules) {
+    const tasks = [];
+
+    for (const r of rules) {
+        tasks.push((user, context, callback) => {
+            try {
+                r(user, context, (err) => {
+                        if (err) {
+                            callback(err);
+                        } else {
+                            callback(null, user, context);
+                        }
+                    }
+                );
+            } catch (e) {
+                callback(e);
+            }
+        });
+    }
+    return tasks;
+}
+
 exports.execute = (rules, params) => {
     const {
         event,
@@ -140,14 +162,15 @@ exports.execute = (rules, params) => {
         function (callback) {
             callback(null, user, context);
         },
-        ...rules
-    ], function (err, result) {
+        //...rules
+        ...wrap(rules)
+    ], function (err, user, context) {
         if (err) {
             api.access.deny(err);
             return;
         }
 
-        diffAndCallApi(initialUser, user, initialContext, context, api);
+        diffAndCallApi(user, context, api);
     });
 };
 
