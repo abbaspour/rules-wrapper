@@ -1,5 +1,6 @@
 const async = require('async');
-const _ = require('lodash');
+
+const isNotEmpty = (o) => o && Object.keys(o).length > 0;
 
 function mapToContext(event) {
     const context = {
@@ -58,11 +59,11 @@ function mapToContext(event) {
         delete (context.request.geoip?.timeZone);
     }
 
-    if (!_.isEmpty(event?.secrets)) {
+    if (isNotEmpty(event?.secrets)) {
         context.configuration = event.secrets;
     }
 
-    _.forEach(context?.authentication?.methods, m => m.timestamp = new Date(m.timestamp).valueOf());
+    context?.authentication?.methods.forEach(m => {m.timestamp = new Date(m.timestamp).valueOf();});
 
     Object.defineProperty(context, 'sessionID', {
         get: function () {
@@ -88,7 +89,7 @@ function mapToUser(event) {
         clientID: event?.client?.client_id,
     };
 
-    _.forEach(user.identities, i => delete (i.userId));
+    user?.identities?.forEach(i => delete (i.userId));
 
     return user;
 }
@@ -101,11 +102,11 @@ function diffAndCallApi(user, context, api) {
     }
 
     // -- Access Token -- (claims and scopes)
-    _.forEach(context?.accessToken, (v, k) => api.accessToken.setCustomClaim(k, v));
+    Object.entries(context?.accessToken)?.forEach(e => api.accessToken.setCustomClaim(e[0], e[1]));
     // todo: diff scopes and call addScope() && removeScope()
 
     // -- ID Token --
-    _.forEach(context?.idToken, (v, k) => api.idToken.setCustomClaim(k, v));
+    Object.entries(context?.idToken)?.forEach(e => api.idToken.setCustomClaim(e[0], e[1]));
 
     // -- Redirection --
     if (context?.redirect?.url) {
@@ -146,13 +147,10 @@ exports.execute = (rules, params) => {
         api
     } = params;
 
-    const clonedEvent = _.cloneDeep(event);
+    const _event = structuredClone(event);
 
-    const initialContext = mapToContext(clonedEvent);
-    const initialUser = mapToUser(clonedEvent);
-
-    const context = _.cloneDeep(initialContext);
-    const user = _.cloneDeep(initialUser);
+    const context = mapToContext(_event);
+    const user = mapToUser(_event);
 
     // noinspection JSUnusedLocalSymbols
     // eslint-disable-next-line no-unused-vars

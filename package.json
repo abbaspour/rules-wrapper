@@ -11,8 +11,7 @@
   "author": "Amin Abbaspour <amin@okta.com>",
   "license": "ISC",
   "dependencies": {
-    "async": "^3.2.5",
-    "lodash": "^4.17.21"
+    "async": "^3.2.5"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
