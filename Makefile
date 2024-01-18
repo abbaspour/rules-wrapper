@@ -12,4 +12,7 @@ node_modules: package.json
 clean:
 	rm -rf node_modules
 
+publish:
+	npm publish
+
 .PHONY: test install clean lint

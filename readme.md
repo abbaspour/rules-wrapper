@@ -12,7 +12,7 @@ see [mapping.md](mapping.md)
 * [x] setting primaryUserId
 * [ ] SAML response mapping
 * [x] `global` object
-* [ ] pre & post redirect 
+* [x] pre & post redirect 
 * [ ] `auth0` object
 * [ ] npm dependencies
 * [ ] MFA
