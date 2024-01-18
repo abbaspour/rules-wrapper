@@ -1,3 +1,4 @@
+/* eslint-disable */
 const async = require('async');
 
 const isNotEmpty = (o) => o && Object.keys(o).length > 0;
@@ -63,7 +64,9 @@ function mapToContext(event) {
         context.configuration = event.secrets;
     }
 
-    context?.authentication?.methods.forEach(m => {m.timestamp = new Date(m.timestamp).valueOf();});
+    context?.authentication?.methods.forEach(m => {
+        m.timestamp = new Date(m.timestamp).valueOf();
+    });
 
     Object.defineProperty(context, 'sessionID', {
         get: function () {
@@ -120,31 +123,28 @@ function diffAndCallApi(user, context, api) {
 }
 
 function wrap(rules) {
-    const tasks = [];
-
-    for (const r of rules) {
-        tasks.push((user, context, callback) => {
-            try {
-                r(user, context, (err) => {
-                        if (err) {
-                            callback(err);
-                        } else {
-                            callback(null, user, context);
-                        }
+    return rules.map((r, i) => (user, context, callback) => {
+        try {
+            r(user, context, (err) => {
+                    if (err) {
+                        console.log(`error returned from rule[${i}]: ${JSON.stringify(err)}`);
+                        callback(err);
+                    } else {
+                        callback(null, user, context);
                     }
-                );
-            } catch (e) {
-                callback(e);
-            }
-        });
-    }
-    return tasks;
+                }
+            );
+        } catch (e) {
+            callback(e);
+        }
+    });
 }
 
 exports.execute = (rules, params) => {
     const {
         event,
-        api
+        api,
+        onContinue = false
     } = params;
 
     const _event = structuredClone(event);
@@ -152,8 +152,10 @@ exports.execute = (rules, params) => {
     const context = mapToContext(_event);
     const user = mapToUser(_event);
 
-    // noinspection JSUnusedLocalSymbols
+    if (onContinue) context.protocol = 'redirect-callback';
+
     // eslint-disable-next-line no-unused-vars
+    // noinspection JSUnusedLocalSymbols,DuplicatedCode
     const global = {};
 
     async.waterfall([
@@ -164,6 +166,7 @@ exports.execute = (rules, params) => {
         ...wrap(rules)
     ], function (err, user, context) {
         if (err) {
+            console.log(`received error in final callback: ${err}, ${JSON.stringify(err)}`);
             api.access.deny(err);
             return;
         }
