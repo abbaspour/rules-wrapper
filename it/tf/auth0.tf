@@ -49,6 +49,8 @@ resource "auth0_user" "user_1" {
   connection_name = data.auth0_connection.db.name
   email = var.user1_email
   password = var.default_password
+  given_name = "User1"
+  family_name = "Tester"
 }
 
 ## outputs

@@ -12,8 +12,12 @@ see [mapping.md](mapping.md)
 * [x] setting primaryUserId
 * [ ] SAML response mapping
 * [x] `global` object
+* [ ] `global` object fields write back to cache
 * [x] pre & post redirect 
 * [ ] `auth0` object
 * [ ] npm dependencies
 * [ ] MFA
+
+# Not supported 
 * [ ] upstream IdP access_token
+ 

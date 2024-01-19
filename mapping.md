@@ -55,6 +55,29 @@ onExecutePostLogin = (event, api) => {
 | `.multifactor.*`                | `.multifactor`       | 
 | `.redirect.sendUserTo(url)`     | `.redirect {url}`    |
 
+### SAML Mappiong Methods
+
+Based
+on [Rules SAML assertion mapping](https://auth0.com/docs/authenticate/protocols/saml/saml-configuration/customize-saml-assertions)
+and
+[Actions](https://auth0.com/docs/customize/actions/flows-and-triggers/login-flow/api-object)
+
+| Rules `context.samlConfiguration` | Action `api.samlResponse`  |
+|:----------------------------------|:---------------------------|
+| `.lifetimeInSeconds`              | `.setLifetimeInSeconds()`  |
+| `.mappings`                       | `.`                        | 
+| `.signatureAlgorithm`             | `.setSignatureAlgorithm()` |  
+| `.`                               | `.`                        | 
+| `.`                               | `.`                        | 
+| `.`                               | `.`                        | 
+| `.`                               | `.`                        | 
+| `.`                               | `.`                        | 
+| `.`                               | `.`                        | 
+
+Missing from docs:
+* `setSignatureAlgorithm()`
+* 
+
 # User Mapping
 
 ## Attributes

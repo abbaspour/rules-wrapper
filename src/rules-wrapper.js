@@ -118,7 +118,10 @@ function diffAndCallApi(user, context, api) {
     }
 
     // -- SAML --
-
+    if (context.samlConfiguration.signatureAlgorithm) {
+        console.log(`api.samlResponse.setSignatureAlgorithm(${context.samlConfiguration.signatureAlgorithm})`);
+        api.samlResponse.setSignatureAlgorithm(context.samlConfiguration.signatureAlgorithm);
+    }
 
 }
 

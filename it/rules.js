@@ -16,3 +16,8 @@ function redirect(user, context, callback) {
     };
     callback();
 }
+
+function saml(user, context, callback) {
+    context.samlConfiguration.signatureAlgorithm = 'rsa-sha256';
+    callback();
+}
