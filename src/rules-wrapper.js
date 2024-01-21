@@ -150,6 +150,14 @@ function diffAndCallApi(user, context, api) {
         api.samlResponse.setMapIdentities(context.samlConfiguration.mapIdentities);
     }
 
+    if (context.samlConfiguration.signResponse) {
+        api.samlResponse.setSignResponse(context.samlConfiguration.signResponse);
+    }
+
+    if (context.samlConfiguration.nameIdentifierFormat) {
+        api.samlResponse.setNameIdentifierFormat(context.samlConfiguration.nameIdentifierFormat);
+    }
+
 
     if (context.samlConfiguration.signatureAlgorithm) {
         api.samlResponse.setSignatureAlgorithm(context.samlConfiguration.signatureAlgorithm);
@@ -163,8 +171,24 @@ function diffAndCallApi(user, context, api) {
         api.samlResponse.setNameIdentifierProbes(context.samlConfiguration.nameIdentifierProbes);
     }
 
+    if (context.samlConfiguration.authnContextClassRef) {
+        api.samlResponse.setAuthnContextClassRef(context.samlConfiguration.authnContextClassRef);
+    }
+
+    if (context.samlConfiguration.includeAttributeNameFormat) {
+        api.samlResponse.setIncludeAttributeNameFormat(context.samlConfiguration.includeAttributeNameFormat);
+    }
+
+    if (context.samlConfiguration.typedAttributes) {
+        api.samlResponse.setTypedAttributes(context.samlConfiguration.typedAttributes);
+    }
+
     if (context.samlConfiguration.lifetimeInSeconds) {
         api.samlResponse.setLifetimeInSeconds(context.samlConfiguration.lifetimeInSeconds);
+    }
+
+    if (context.samlConfiguration.signingCert) {
+        api.samlResponse.setSigningCert(context.samlConfiguration.signingCert);
     }
     /*
     if (context.samlConfiguration.) {
