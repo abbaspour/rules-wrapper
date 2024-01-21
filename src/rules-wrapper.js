@@ -121,6 +121,36 @@ function diffAndCallApi(user, context, api) {
     // context https://auth0.com/docs/authenticate/protocols/saml/saml-configuration/customize-saml-assertions
     // api https://auth0.com/docs/customize/actions/flows-and-triggers/login-flow/api-object
 
+    if (context.samlConfiguration.audience) {
+        api.samlResponse.setAudience(context.samlConfiguration.audience);
+    }
+
+    if (context.samlConfiguration.recipient) {
+        api.samlResponse.setRecipient(context.samlConfiguration.recipient);
+    }
+
+    /*
+    if (context.samlConfiguration.issuer) {
+        api.samlResponse.setIssuer(context.samlConfiguration.issuer);
+    }
+    */
+    if (context.samlConfiguration.createUpnClaim) {
+        api.samlResponse.setCreateUpnClaim(context.samlConfiguration.createUpnClaim);
+    }
+
+    if (context.samlConfiguration.passthroughClaimsWithNoMapping) {
+        api.samlResponse.setPassthroughClaimsWithNoMapping(context.samlConfiguration.passthroughClaimsWithNoMapping);
+    }
+
+    if (context.samlConfiguration.mapUnknownClaimsAsIs) {
+        api.samlResponse.setMapUnknownClaimsAsIs(context.samlConfiguration.mapUnknownClaimsAsIs);
+    }
+
+    if (context.samlConfiguration.mapIdentities) {
+        api.samlResponse.setMapIdentities(context.samlConfiguration.mapIdentities);
+    }
+
+
     if (context.samlConfiguration.signatureAlgorithm) {
         api.samlResponse.setSignatureAlgorithm(context.samlConfiguration.signatureAlgorithm);
     }
