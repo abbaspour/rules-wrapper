@@ -118,10 +118,30 @@ function diffAndCallApi(user, context, api) {
     }
 
     // -- SAML --
+    // context https://auth0.com/docs/authenticate/protocols/saml/saml-configuration/customize-saml-assertions
+    // api https://auth0.com/docs/customize/actions/flows-and-triggers/login-flow/api-object
+
     if (context.samlConfiguration.signatureAlgorithm) {
-        console.log(`api.samlResponse.setSignatureAlgorithm(${context.samlConfiguration.signatureAlgorithm})`);
         api.samlResponse.setSignatureAlgorithm(context.samlConfiguration.signatureAlgorithm);
     }
+
+    if (context.samlConfiguration.digestAlgorithm) {
+        api.samlResponse.setDigestAlgorithm(context.samlConfiguration.digestAlgorithm);
+    }
+
+    if (context.samlConfiguration.nameIdentifierProbes) {
+        api.samlResponse.setNameIdentifierProbes(context.samlConfiguration.nameIdentifierProbes);
+    }
+
+    if (context.samlConfiguration.lifetimeInSeconds) {
+        api.samlResponse.setLifetimeInSeconds(context.samlConfiguration.lifetimeInSeconds);
+    }
+    /*
+    if (context.samlConfiguration.) {
+        console.log(`api.samlResponse.(${context.samlConfiguration.})`);
+        api.samlResponse.(context.samlConfiguration.);
+    }
+*/
 
 }
 

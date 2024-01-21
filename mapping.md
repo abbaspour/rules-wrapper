@@ -62,21 +62,29 @@ on [Rules SAML assertion mapping](https://auth0.com/docs/authenticate/protocols/
 and
 [Actions](https://auth0.com/docs/customize/actions/flows-and-triggers/login-flow/api-object)
 
-| Rules `context.samlConfiguration` | Action `api.samlResponse`  |
-|:----------------------------------|:---------------------------|
-| `.lifetimeInSeconds`              | `.setLifetimeInSeconds()`  |
-| `.mappings`                       | `.`                        | 
-| `.signatureAlgorithm`             | `.setSignatureAlgorithm()` |  
-| `.`                               | `.`                        | 
-| `.`                               | `.`                        | 
-| `.`                               | `.`                        | 
-| `.`                               | `.`                        | 
-| `.`                               | `.`                        | 
-| `.`                               | `.`                        | 
-
-Missing from docs:
-* `setSignatureAlgorithm()`
-* 
+| Rules `context.samlConfiguration` | Type     | Action `api.samlResponse`    |
+|:----------------------------------|:---------|:-----------------------------|
+| audience	                         | string   |                              | 
+| recipient	                        | string   |                              | 
+| issuer	                           | string   |                              | 
+| mappings	                         | object   |                              | 
+| createUpnClaim	                   | boolean  |                              | 
+| passthroughClaimsWithNoMapping    | 	boolean |                              | 
+| mapUnknownClaimsAsIs	             | boolean  |                              | 
+| mapIdentities	                    | boolean  |                              | 
+| signatureAlgorithm                | 	string  | `.setSignatureAlgorithm()`   | 
+| digestAlgorithm                   | 	string  | `.setDigestAlgorithm()`      | 
+| destination	                      | object   |                              | 
+| lifetimeInSeconds                 | 	integer | `.setLifetimeInSeconds()`    | 
+| signResponse	                     | boolean  |                              | 
+| nameIdentifierFormat	             | string   |                              | 
+| nameIdentifierProbes	             | array    | `.setNameIdentifierProbes()` | 
+| authnContextClassRef	             | string   |                              | 
+| typedAttributes	                  | boolean  |                              | 
+| includeAttributeNameFormat        | 	boolean |                              | 
+| logout	                           | object   |                              | 
+| binding	                          | string   |                              | 
+| signingCert                       | 	string  |                              |  
 
 # User Mapping
 

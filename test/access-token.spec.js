@@ -12,24 +12,28 @@ describe('handle custom claims', () => {
 
         const event = {};
         const api = {
-            accessToken: {
-                setCustomClaim: _jest.fn()
+            samlResponse: {
+                setSignatureAlgorithm: _jest.fn(),
+                setDigestAlgorithm: _jest.fn(),
+                setNameIdentifierProbes: _jest.fn(),
+                setLifetimeInSeconds: _jest.fn(),
             }
         };
 
         function rule(user, context, callback) {
-            context.accessToken['k1'] = 'v1';
-            context.accessToken['https://k2'] = 'v2';
+            context.samlConfiguration.signatureAlgorithm = 'sa';
+            context.samlConfiguration.digestAlgorithm = 'da';
+            context.samlConfiguration.nameIdentifierProbes = ['na1', 'na2'];
+            context.samlConfiguration.lifetimeInSeconds = 3600;
             callback(null);
         }
 
         wrapper.execute([rule], {event, api});
 
-        expect(api.accessToken.setCustomClaim).toHaveBeenCalledTimes(2);
-        expect(api.accessToken.setCustomClaim).toHaveBeenNthCalledWith(1, 'k1', 'v1');
-        expect(api.accessToken.setCustomClaim).toHaveBeenNthCalledWith(2, 'https://k2', 'v2');
+        expect(api.samlResponse.setSignatureAlgorithm).toHaveBeenCalledWith('sa');
+        expect(api.samlResponse.setDigestAlgorithm).toHaveBeenCalledWith('da');
+        expect(api.samlResponse.setNameIdentifierProbes).toHaveBeenCalledWith(['na1', 'na2']);
+        expect(api.samlResponse.setLifetimeInSeconds).toHaveBeenCalledWith(3600);
 
     });
-
-    // TODO: scopes alteration tests
 });
