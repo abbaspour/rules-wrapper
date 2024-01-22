@@ -29,12 +29,10 @@ resource "auth0_action" "wrapper-action" {
     version = "v3"
   }
 
-  /*
   dependencies {
     name    = "rules-wrapper"
-    version = "0.1.4"
+    version = "0.1.6"
   }
-  */
 
   dependencies {
     name    = "async"
