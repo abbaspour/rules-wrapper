@@ -47,13 +47,13 @@ onExecutePostLogin = (event, api) => {
 
 ## Methods
 
-| Action `api`                    | Rules `context`      |
-|:--------------------------------|:---------------------|
-| `.accessToken.setCustomClaim()` | `.accessToken`       |
-| `.idToken.setCustomClaim()`     | `.idToken`           |
-| `.samlResponse.setAttribute()`  | `.samlConfiguration` |
-| `.multifactor.*`                | `.multifactor`       | 
-| `.redirect.sendUserTo(url)`     | `.redirect {url}`    |
+| Action `api`                    | Rules `context`         |
+|:--------------------------------|:------------------------|
+| `.accessToken.setCustomClaim()` | `.accessToken`          |
+| `.idToken.setCustomClaim()`     | `.idToken`              |
+| `.samlResponse.setX()`          | `.samlConfiguration.x`  |
+| `.multifactor.enable(p, {r})`   | `.multifactor {p, {r}}` | 
+| `.redirect.sendUserTo(url)`     | `.redirect {url}`       |
 
 ### SAML Mappiong Methods
 

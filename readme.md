@@ -13,16 +13,17 @@ see [mapping.md](mapping.md)
 * [x] SAML response mapping
 * [x] `global` object
 * [x] pre & post redirect 
+* [x] MFA
+* [ ] user and app metadata
 * [ ] `auth0` object
 * [ ] npm dependencies
-* [ ] MFA
-* [ ] user and app metadata
 
 # Not supported 
 * [ ] upstream IdP access_token
 
 # Todo
 * [ ] `global` object fields write back to cache
+* [ ] log level param
 
 # References
 * https://auth0team.atlassian.net/servicedesk/customer/portal/9/DR-2055?created=true

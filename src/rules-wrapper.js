@@ -117,6 +117,16 @@ function diffAndCallApi(user, context, api) {
         api.redirect.sendUserTo(context.redirect.url);
     }
 
+    // -- MFA --
+    if (context?.multifactor) {
+        const {
+            provider,
+            allowRememberBrowser = true
+        } = context.multifactor;
+        if (provider === 'any') // only allowed value in Rules
+            api.multifactor.enable('any', {allowRememberBrowser});
+    }
+
     // -- SAML --
     // context https://auth0.com/docs/authenticate/protocols/saml/saml-configuration/customize-saml-assertions
     // api https://auth0.com/docs/customize/actions/flows-and-triggers/login-flow/api-object
