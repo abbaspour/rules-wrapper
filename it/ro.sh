@@ -14,6 +14,8 @@ declare -r auth0_domain=$(awk -F= '/^auth0_domain/{print $2}' ${tfvars} | tr -d 
 
 declare BODY=$(cat <<EOL
 {
+  "scope": "s1 s2",
+  "audience": "my.rs",
   "grant_type": "http://auth0.com/oauth/grant-type/password-realm",
   "realm" : "${connection}",
   "client_id": "${client_id}",
@@ -23,6 +25,8 @@ declare BODY=$(cat <<EOL
 EOL
 )
 
+#curl --header 'content-type: application/json' -d "${BODY}" "https://${auth0_domain}/oauth/token"
+#exit
 
 readonly response=$(curl -s --header 'content-type: application/json' -d "${BODY}" "https://${auth0_domain}/oauth/token")
 
@@ -31,4 +35,10 @@ readonly response=$(curl -s --header 'content-type: application/json' -d "${BODY
 readonly access_token=$(jq -r '.access_token' <<< "${response}")
 readonly id_token=$(jq -r '.id_token' <<< "${response}")
 
-jq -Rr 'split(".") | .[1] | gsub("-"; "+") | gsub("_"; "/") | gsub("%3D"; "=") | @base64d | fromjson' <<< "${id_token}"
+echo "Access Token"
+jq -Rr 'split(".") | .[1] | gsub("-"; "+") | gsub("_"; "/") | gsub("%3D"; "=") | @base64d | fromjson' <<< "${access_token}"
+
+if [[ -n "${id_token}" && "${id_token}" != "null" ]]; then
+  echo "ID Token"
+  jq -Rr 'split(".") | .[1] | gsub("-"; "+") | gsub("_"; "/") | gsub("%3D"; "=") | @base64d | fromjson' <<< "${id_token}"
+fi

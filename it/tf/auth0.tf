@@ -48,6 +48,33 @@ resource "auth0_connection_clients" "db_clients" {
   }
 }
 
+resource "auth0_resource_server" "rs" {
+  name = "Sample Resource Server"
+  identifier = "my.rs"
+
+  allow_offline_access = true
+  skip_consent_for_verifiable_first_party_clients = true
+}
+
+resource "auth0_resource_server_scopes" "my_api_scopes" {
+  resource_server_identifier = auth0_resource_server.rs.identifier
+
+  scopes {
+    name        = "s1"
+    description = "scope 1"
+  }
+
+  scopes {
+    name        = "s2"
+    description = "scope 2"
+  }
+
+  scopes {
+    name        = "s3"
+    description = "scope 3"
+  }
+}
+
 ## Users
 resource "auth0_user" "user_1" {
   depends_on = [auth0_connection_clients.db_clients]
@@ -60,6 +87,7 @@ resource "auth0_user" "user_1" {
 
 ## outputs
 output "spa_login_url" {
-  value = "https://${var.auth0_domain}/authorize?client_id=${auth0_client.jwt-io.id}&redirect_uri=https%3A%2F%2Fjwt.io&response_type=id_token&nonce=nonce&prompt=login&scope=openid%20profile%20email&login_hint=${auth0_user.user_1.email}"
+  //value = "https://${var.auth0_domain}/authorize?client_id=${auth0_client.jwt-io.id}&redirect_uri=https%3A%2F%2Fjwt.io&response_type=id_token&nonce=nonce&prompt=login&scope=openid%20profile%20email&login_hint=${auth0_user.user_1.email}"
+  value = "https://${var.auth0_domain}/authorize?client_id=${auth0_client.jwt-io.id}&redirect_uri=https%3A%2F%2Fjwt.io&response_type=roke&nonce=nonce&prompt=login&scope=s1%s2&audience=my.rs&login_hint=${auth0_user.user_1.email}"
 }
 

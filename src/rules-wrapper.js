@@ -97,16 +97,32 @@ function mapToUser(event) {
     return user;
 }
 
-function diffAndCallApi(user, context, api) {
+function diffAndCallApi(event, user, context, api) {
 
     // -- PrimaryUserId --
     if (context?.primaryUser) {
         api.authentication.setPrimaryUserId(context.primaryUser);
     }
 
-    // -- Access Token -- (claims and scopes)
-    Object.entries(context?.accessToken)?.forEach(e => api.accessToken.setCustomClaim(e[0], e[1]));
-    // todo: diff scopes and call addScope() && removeScope()
+    // -- Access Token -- (claims)
+    Object.entries(context?.accessToken)?.forEach(([key, value]) => key !== 'scope' && api.accessToken.setCustomClaim(key, value));
+
+    // -- Access Token -- (scopes)
+    if (context.accessToken.scope) {
+        let requested_scopes = event?.transaction?.requested_scopes; // array
+        if(! requested_scopes) {
+            if(event?.request?.body?.scope) { // for ROPG
+                requested_scopes = event.request.body.scope.split(' ');
+            }
+        }
+        const rules_altered_scopes = context.accessToken.scope.split(' '); // string -> array
+
+        const removed_scopes = requested_scopes.filter(s => !rules_altered_scopes.includes(s));
+        const added_scopes = rules_altered_scopes.filter(s => !requested_scopes.includes(s));
+
+        added_scopes.forEach(s => api.accessToken.addScope(s));
+        removed_scopes.forEach(s => api.accessToken.removeScope(s));
+    }
 
     // -- ID Token --
     Object.entries(context?.idToken)?.forEach(e => api.idToken.setCustomClaim(e[0], e[1]));
@@ -210,16 +226,17 @@ function diffAndCallApi(user, context, api) {
 function wrap(rules) {
     return rules.map((r, i) => (user, context, callback) => {
         try {
-            r(user, context, (err) => {
+            r(user, context, (err, u, c) => {
                     if (err) {
-                        console.log(`error returned from rule[${i}]: ${JSON.stringify(err)}`);
+                        console.log(`error returned from rule "${r.name}" index ${i}: ${r.name}: ${JSON.stringify(err)}`);
                         callback(err);
                     } else {
-                        callback(null, user, context);
+                        callback(null, u ? u : user, c ? c : context);
                     }
                 }
             );
         } catch (e) {
+            console.log(`uncaught error from rule "${r.name}" index ${i}: ${e}, ${JSON.stringify(e)}`);
             callback(e);
         }
     });
@@ -231,6 +248,8 @@ exports.execute = (rules, params) => {
         api,
         onContinue = false
     } = params;
+
+    // console.log(`wrapper received event: ${JSON.stringify(event)}`);
 
     const _event = structuredClone(event);
 
@@ -256,7 +275,7 @@ exports.execute = (rules, params) => {
             return;
         }
 
-        diffAndCallApi(user, context, api);
+        diffAndCallApi(event, user, context, api);
     });
 };
 
