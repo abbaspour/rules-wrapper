@@ -26,6 +26,7 @@ describe('handle custom claims', () => {
                 setNameIdentifierFormat: _jest.fn(),
                 setSignatureAlgorithm: _jest.fn(),
                 setDigestAlgorithm: _jest.fn(),
+                setDestination: _jest.fn(),
                 setNameIdentifierProbes: _jest.fn(),
                 setAuthnContextClassRef: _jest.fn(),
                 setIncludeAttributeNameFormat: _jest.fn(),
@@ -46,6 +47,7 @@ describe('handle custom claims', () => {
             context.samlConfiguration.nameIdentifierFormat = 'urn:oasis:names:tc:SAML:1.1:nameid-format:myformat';
             context.samlConfiguration.signatureAlgorithm = 'sa';
             context.samlConfiguration.digestAlgorithm = 'da';
+            context.samlConfiguration.destination = 'destination';
             context.samlConfiguration.nameIdentifierProbes = ['na1', 'na2'];
             context.samlConfiguration.authnContextClassRef = 'urn:oasis:names:tc:SAML:2.0:ac:classes:myref';
             context.samlConfiguration.includeAttributeNameFormat = true;
@@ -70,6 +72,7 @@ describe('handle custom claims', () => {
         expect(api.samlResponse.setNameIdentifierFormat).toHaveBeenCalledWith('urn:oasis:names:tc:SAML:1.1:nameid-format:myformat');
         expect(api.samlResponse.setSignatureAlgorithm).toHaveBeenCalledWith('sa');
         expect(api.samlResponse.setDigestAlgorithm).toHaveBeenCalledWith('da');
+        expect(api.samlResponse.setDestination).toHaveBeenCalledWith('destination');
         expect(api.samlResponse.setNameIdentifierProbes).toHaveBeenCalledWith(['na1', 'na2']);
         expect(api.samlResponse.setAuthnContextClassRef).toHaveBeenCalledWith('urn:oasis:names:tc:SAML:2.0:ac:classes:myref');
         expect(api.samlResponse.setIncludeAttributeNameFormat).toHaveBeenCalledWith(true);

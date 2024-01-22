@@ -167,6 +167,10 @@ function diffAndCallApi(user, context, api) {
         api.samlResponse.setDigestAlgorithm(context.samlConfiguration.digestAlgorithm);
     }
 
+    if (context.samlConfiguration.destination) {
+        api.samlResponse.setDestination(context.samlConfiguration.destination);
+    }
+
     if (context.samlConfiguration.nameIdentifierProbes) {
         api.samlResponse.setNameIdentifierProbes(context.samlConfiguration.nameIdentifierProbes);
     }
@@ -190,12 +194,6 @@ function diffAndCallApi(user, context, api) {
     if (context.samlConfiguration.signingCert) {
         api.samlResponse.setSigningCert(context.samlConfiguration.signingCert);
     }
-    /*
-    if (context.samlConfiguration.) {
-        console.log(`api.samlResponse.(${context.samlConfiguration.})`);
-        api.samlResponse.(context.samlConfiguration.);
-    }
-*/
 
 }
 

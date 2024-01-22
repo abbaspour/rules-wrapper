@@ -67,14 +67,14 @@ and
 | audience                          | string  | `.setAudience()`                       | 
 | recipient	                        | string  | `.setRecipient()`                      | 
 | issuer                            | string  | ???                                    | 
-| mappings                          | object  |                                        | 
+| mappings                          | object  | ???                                    | 
 | createUpnClaim                    | boolean | `.setCreateUpnClaim()`                 | 
 | passthroughClaimsWithNoMapping    | boolean | `.setPassthroughClaimsWithNoMapping()` | 
 | mapUnknownClaimsAsIs              | boolean | `.setMapUnknownClaimsAsIs()`           | 
 | mapIdentities	                    | boolean | `.setMapIdentities()`                  | 
 | signatureAlgorithm                | string  | `.setSignatureAlgorithm()`             | 
 | digestAlgorithm                   | string  | `.setDigestAlgorithm()`                | 
-| destination	                      | object  |                                        | 
+| destination                       | object? | `.setDestination()`                    | 
 | lifetimeInSeconds                 | integer | `.setLifetimeInSeconds()`              | 
 | signResponse                      | boolean | `.setSignResponse()`                   | 
 | nameIdentifierFormat              | string  | `.setNameIdentifierFormat()            | 
@@ -82,7 +82,7 @@ and
 | authnContextClassRef              | string  | `.setAuthnContextClassRef()`           | 
 | typedAttributes                   | boolean | `.setTypedAttributes()`                | 
 | includeAttributeNameFormat        | boolean | `.setIncludeAttributeNameFormat()`     | 
-| logout	                           | object  |                                        | 
+| logout                            | object  | ???                                    | 
 | binding                           | string  | ???                                    | 
 | signingCert                       | string  | `.setSigningCert()`                    |  
 
