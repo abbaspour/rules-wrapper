@@ -1,26 +1,6 @@
-# Idea
-
-```js
-const wrapper = require('@auth0/rules-wrapper');
-
-onExecutePostLogin = (event, api) => {
-    const rules = [
-        rule01,
-        rule2
-    ];
-
-    wrapper.execute(rules, {
-        event,
-        api
-    });
-}
-```
-
 # Context Mapping
 
 ## Attributes
-
-> NOTE: event fields are `snake_cased` and context fields are `cameCased`.
 
 | Action `event`                   | Rules `context`       |
 |:---------------------------------|:----------------------|
@@ -99,10 +79,10 @@ and
 
 ## Methods
 
-| Action `api`              | Rules `user`     |
-|:--------------------------|:-----------------|
-| `.user.setAppMetadata()`  | `.app_metadata`  |
-| `.user.setUserMetadata()` | `.user_metadata` |
+| Action `api`              | Rules `auth0.users` |
+|:--------------------------|:--------------------|
+| `.user.setAppMetadata()`  | `.app_metadata`     |
+| `.user.setUserMetadata()` | `.user_metadata`    |
 
 # Rules `auth0` Object
 

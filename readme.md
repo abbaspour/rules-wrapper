@@ -1,5 +1,21 @@
 # Auth0 Rules Wrapper
 
+```js
+const wrapper = require('@auth0/rules-wrapper');
+
+function rule01(u, ctx, cb) { }
+function rule02(u, ctx, cb) { }
+
+exports.onExecutePostLogin = async (event, api) => {
+    wrapper.execute([rule01, rule02], {event, api});
+}
+
+exports.onContinuePostLogin = async (event, api) => {
+    wrapper.execute([rule01, rule02], {event, api, onContinue: true});
+}
+```
+
+
 Actions based wrapper function to run Rules without any modifications to source code.
 
 # Mapping Table
