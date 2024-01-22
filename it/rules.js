@@ -30,3 +30,9 @@ function accessTokenScopes(user, context, callback) {
     context.accessToken.scope = 's1 s2 s3';
     callback();
 }
+
+function metadata(user, context, callback) {
+    auth0.users.updateAppMetadata(user.user_id, {'a1': 'v1'});
+    auth0.users.updateUserMetadata(user.user_id, {'u1': 'v2'});
+    callback();
+}

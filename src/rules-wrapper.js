@@ -31,7 +31,9 @@ function mapToContext(event) {
         idToken: {},
         samlConfiguration: {},
         // TODO multifactor: {},
-        // TODO redirect: {}
+        // TODO redirect: {},
+        app_metadata_change_record: [],
+        user_metadata_change_record: []
     };
 
     delete (context?.authentication?.riskAssessment);
@@ -97,7 +99,7 @@ function mapToUser(event) {
     return user;
 }
 
-function diffAndCallApi(event, user, context, api) {
+function diffAndCallApi(event, user, context, auth0, api) {
 
     // -- PrimaryUserId --
     if (context?.primaryUser) {
@@ -110,8 +112,8 @@ function diffAndCallApi(event, user, context, api) {
     // -- Access Token -- (scopes)
     if (context.accessToken.scope) {
         let requested_scopes = event?.transaction?.requested_scopes; // array
-        if(! requested_scopes) {
-            if(event?.request?.body?.scope) { // for ROPG
+        if (!requested_scopes) {
+            if (event?.request?.body?.scope) { // for ROPG
                 requested_scopes = event.request.body.scope.split(' ');
             }
         }
@@ -125,7 +127,7 @@ function diffAndCallApi(event, user, context, api) {
     }
 
     // -- ID Token --
-    Object.entries(context?.idToken)?.forEach(e => api.idToken.setCustomClaim(e[0], e[1]));
+    Object.entries(context?.idToken)?.forEach(([key, value]) => api.idToken.setCustomClaim(key, value));
 
     // -- Redirection --
     if (context?.redirect?.url) {
@@ -142,6 +144,14 @@ function diffAndCallApi(event, user, context, api) {
         if (provider === 'any') // only allowed value in Rules
             api.multifactor.enable('any', {allowRememberBrowser});
     }
+
+    // -- Metadata --
+    for (const r of context.app_metadata_change_record)
+        Object.entries(r).forEach(([name, value]) => api.user.setAppMetadata(name, value));
+
+
+    for (const r of context.user_metadata_change_record)
+        Object.entries(r).forEach(([name, value]) => api.user.setUserMetadata(name, value));
 
     // -- SAML --
     // context https://auth0.com/docs/authenticate/protocols/saml/saml-configuration/customize-saml-assertions
@@ -260,7 +270,36 @@ exports.execute = (rules, params) => {
 
     // eslint-disable-next-line no-unused-vars
     // noinspection JSUnusedLocalSymbols,DuplicatedCode
-    const global = {};
+    // const global = {};
+
+    const canonical_tenant = '???';
+    const domain = '???';
+
+    const auth0 = {
+        accessToken: 'TODO',
+        baseUrl: `https://${canonical_tenant}/api/v2`,
+        domain,
+        users: {
+            updateAppMetadata: function (user_id, metadata) {
+                if (user_id !== _event?.user?.user_id) {
+                    console.log(`WARN: updateAppMetadata() for user_id(${user_id}) other than current user (${_event.user.user_id}) is unsupported.`);
+                } else {
+                    console.log(`adding to updateAppMetadata(${JSON.stringify(metadata)})`);
+                    context.app_metadata_change_record.push(metadata);
+                }
+            },
+            updateUserMetadata: function (user_id, metadata) {
+                if (user_id !== _event?.user?.user_id) {
+                    console.log(`WARN: updateUserMetadata() for user_id(${user_id}) other than current user (${_event.user.user_id}) is unsupported.`);
+                } else {
+                    console.log(`adding to updateUserMetadata(${metadata})`);
+                    context.user_metadata_change_record.push(metadata);
+                }
+            }
+        },
+    };
+
+    global.auth0 = auth0;
 
     async.waterfall([
         function (callback) {
@@ -275,7 +314,7 @@ exports.execute = (rules, params) => {
             return;
         }
 
-        diffAndCallApi(event, user, context, api);
+        diffAndCallApi(event, user, context, auth0, api);
     });
 };
 

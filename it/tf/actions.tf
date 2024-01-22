@@ -13,7 +13,8 @@ resource "local_file" "action-code" {
     wrapper_source = data.local_file.wrapper.content
     #rule_names     = "id_token_claim, redirect"
     #rule_names     = "id_token_claim, saml"
-    rule_names     = "accessTokenScopes"
+    //rule_names     = "accessTokenScopes"
+    rule_names     = "metadata"
   })
 }
 

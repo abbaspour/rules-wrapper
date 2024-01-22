@@ -11,17 +11,18 @@ see [mapping.md](mapping.md)
 * [x] id_token claims
 * [x] setting primaryUserId
 * [x] SAML response mapping
-* [x] `global` object
+* [x] `global` object simple
 * [x] pre & post redirect 
 * [x] MFA
-* [ ] user and app metadata
-* [ ] `auth0` object
+* [x] `auth0` object user and app metadata
+* [ ] `auth0` object accessToken
 * [ ] npm dependencies
 
 # Not supported 
 * [ ] upstream IdP access_token
 
 # Todo
+* [ ] `global` object separation 
 * [ ] `global` object fields write back to cache
 * [ ] log level param
 
