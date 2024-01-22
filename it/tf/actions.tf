@@ -8,10 +8,11 @@ data "local_file" "wrapper" {
 
 resource "local_file" "action-code" {
   filename = "../.rendered/action.js"
-  content = templatefile("../action.tpl.js", {
-    rules_source = data.local_file.rules.content
+  content  = templatefile("../action.tpl.js", {
+    rules_source   = data.local_file.rules.content
     wrapper_source = data.local_file.wrapper.content
-    rule_names = "id_token_claim,redirect"
+    #rule_names     = "id_token_claim, redirect"
+    rule_names     = "id_token_claim, saml"
   })
 }
 

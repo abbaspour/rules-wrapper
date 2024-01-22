@@ -41,6 +41,11 @@ data "auth0_connection" "db" {
 resource "auth0_connection_clients" "db_clients" {
   connection_id   = data.auth0_connection.db.id
   enabled_clients = [auth0_client.jwt-io.id, var.auth0_tf_client_id]
+  lifecycle {
+    ignore_changes = [
+      enabled_clients
+    ]
+  }
 }
 
 ## Users
@@ -49,6 +54,8 @@ resource "auth0_user" "user_1" {
   connection_name = data.auth0_connection.db.name
   email = var.user1_email
   password = var.default_password
+  given_name = "User1"
+  family_name = "Tester"
 }
 
 ## outputs

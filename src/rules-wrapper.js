@@ -118,7 +118,82 @@ function diffAndCallApi(user, context, api) {
     }
 
     // -- SAML --
+    // context https://auth0.com/docs/authenticate/protocols/saml/saml-configuration/customize-saml-assertions
+    // api https://auth0.com/docs/customize/actions/flows-and-triggers/login-flow/api-object
 
+    if (context.samlConfiguration.audience) {
+        api.samlResponse.setAudience(context.samlConfiguration.audience);
+    }
+
+    if (context.samlConfiguration.recipient) {
+        api.samlResponse.setRecipient(context.samlConfiguration.recipient);
+    }
+
+    /*
+    if (context.samlConfiguration.issuer) {
+        api.samlResponse.setIssuer(context.samlConfiguration.issuer);
+    }
+    */
+    if (context.samlConfiguration.createUpnClaim) {
+        api.samlResponse.setCreateUpnClaim(context.samlConfiguration.createUpnClaim);
+    }
+
+    if (context.samlConfiguration.passthroughClaimsWithNoMapping) {
+        api.samlResponse.setPassthroughClaimsWithNoMapping(context.samlConfiguration.passthroughClaimsWithNoMapping);
+    }
+
+    if (context.samlConfiguration.mapUnknownClaimsAsIs) {
+        api.samlResponse.setMapUnknownClaimsAsIs(context.samlConfiguration.mapUnknownClaimsAsIs);
+    }
+
+    if (context.samlConfiguration.mapIdentities) {
+        api.samlResponse.setMapIdentities(context.samlConfiguration.mapIdentities);
+    }
+
+    if (context.samlConfiguration.signResponse) {
+        api.samlResponse.setSignResponse(context.samlConfiguration.signResponse);
+    }
+
+    if (context.samlConfiguration.nameIdentifierFormat) {
+        api.samlResponse.setNameIdentifierFormat(context.samlConfiguration.nameIdentifierFormat);
+    }
+
+
+    if (context.samlConfiguration.signatureAlgorithm) {
+        api.samlResponse.setSignatureAlgorithm(context.samlConfiguration.signatureAlgorithm);
+    }
+
+    if (context.samlConfiguration.digestAlgorithm) {
+        api.samlResponse.setDigestAlgorithm(context.samlConfiguration.digestAlgorithm);
+    }
+
+    if (context.samlConfiguration.destination) {
+        api.samlResponse.setDestination(context.samlConfiguration.destination);
+    }
+
+    if (context.samlConfiguration.nameIdentifierProbes) {
+        api.samlResponse.setNameIdentifierProbes(context.samlConfiguration.nameIdentifierProbes);
+    }
+
+    if (context.samlConfiguration.authnContextClassRef) {
+        api.samlResponse.setAuthnContextClassRef(context.samlConfiguration.authnContextClassRef);
+    }
+
+    if (context.samlConfiguration.includeAttributeNameFormat) {
+        api.samlResponse.setIncludeAttributeNameFormat(context.samlConfiguration.includeAttributeNameFormat);
+    }
+
+    if (context.samlConfiguration.typedAttributes) {
+        api.samlResponse.setTypedAttributes(context.samlConfiguration.typedAttributes);
+    }
+
+    if (context.samlConfiguration.lifetimeInSeconds) {
+        api.samlResponse.setLifetimeInSeconds(context.samlConfiguration.lifetimeInSeconds);
+    }
+
+    if (context.samlConfiguration.signingCert) {
+        api.samlResponse.setSigningCert(context.samlConfiguration.signingCert);
+    }
 
 }
 

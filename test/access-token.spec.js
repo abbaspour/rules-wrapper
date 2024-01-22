@@ -7,8 +7,8 @@ const {
     jest: _jest
 } = require('@jest/globals');
 
-describe('handle custom claims', () => {
-    it('should call setCustomClaim for all custom claims', () => {
+describe('handle SAML mapping', () => {
+    it('basic saml mapping', () => {
 
         const event = {};
         const api = {

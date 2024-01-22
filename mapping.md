@@ -55,6 +55,37 @@ onExecutePostLogin = (event, api) => {
 | `.multifactor.*`                | `.multifactor`       | 
 | `.redirect.sendUserTo(url)`     | `.redirect {url}`    |
 
+### SAML Mappiong Methods
+
+Based
+on [Rules SAML assertion mapping](https://auth0.com/docs/authenticate/protocols/saml/saml-configuration/customize-saml-assertions)
+and
+[Actions](https://auth0.com/docs/customize/actions/flows-and-triggers/login-flow/api-object)
+
+| Rules `context.samlConfiguration` | Type    | Action `api.samlResponse`              |
+|:----------------------------------|:--------|:---------------------------------------|
+| audience                          | string  | `.setAudience()`                       | 
+| recipient	                        | string  | `.setRecipient()`                      | 
+| issuer                            | string  | ???                                    | 
+| mappings                          | object  | ???                                    | 
+| createUpnClaim                    | boolean | `.setCreateUpnClaim()`                 | 
+| passthroughClaimsWithNoMapping    | boolean | `.setPassthroughClaimsWithNoMapping()` | 
+| mapUnknownClaimsAsIs              | boolean | `.setMapUnknownClaimsAsIs()`           | 
+| mapIdentities	                    | boolean | `.setMapIdentities()`                  | 
+| signatureAlgorithm                | string  | `.setSignatureAlgorithm()`             | 
+| digestAlgorithm                   | string  | `.setDigestAlgorithm()`                | 
+| destination                       | object? | `.setDestination()`                    | 
+| lifetimeInSeconds                 | integer | `.setLifetimeInSeconds()`              | 
+| signResponse                      | boolean | `.setSignResponse()`                   | 
+| nameIdentifierFormat              | string  | `.setNameIdentifierFormat()            | 
+| nameIdentifierProbes              | array   | `.setNameIdentifierProbes()`           | 
+| authnContextClassRef              | string  | `.setAuthnContextClassRef()`           | 
+| typedAttributes                   | boolean | `.setTypedAttributes()`                | 
+| includeAttributeNameFormat        | boolean | `.setIncludeAttributeNameFormat()`     | 
+| logout                            | object  | ???                                    | 
+| binding                           | string  | ???                                    | 
+| signingCert                       | string  | `.setSigningCert()`                    |  
+
 # User Mapping
 
 ## Attributes
