@@ -14,7 +14,8 @@ resource "local_file" "action-code" {
     #rule_names     = "id_token_claim, redirect"
     #rule_names     = "id_token_claim, saml"
     //rule_names     = "accessTokenScopes"
-    rule_names     = "metadata"
+    //rule_names     = "metadata"
+    rule_names     = "user_search"
   })
 }
 

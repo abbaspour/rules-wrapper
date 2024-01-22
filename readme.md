@@ -30,13 +30,14 @@ see [mapping.md](mapping.md)
 * [x] `global` object simple
 * [x] pre & post redirect 
 * [x] MFA
-* [x] `auth0` object user and app metadata
+* [x] `auth0` object user and app metadata (current user)
+* [ ] `auth0` object user and app metadata (other users)
 * [x] `auth0` object accessToken
-* [ ] npm dependencies
 * [ ] Configuration object 
 
 # Not supported 
 * [ ] upstream IdP access_token
+* [ ] npm dependencies (canirequire) vs actions
 
 # Todo
 * [ ] `global` object separation 
