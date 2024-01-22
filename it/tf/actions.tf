@@ -13,7 +13,8 @@ resource "local_file" "action-code" {
     wrapper_source = data.local_file.wrapper.content
     #rule_names     = "id_token_claim, redirect"
     #rule_names     = "id_token_claim, saml"
-    rule_names     = "accessTokenScopes"
+    //rule_names     = "accessTokenScopes"
+    rule_names     = "metadata"
   })
 }
 
@@ -28,12 +29,10 @@ resource "auth0_action" "wrapper-action" {
     version = "v3"
   }
 
-  /*
   dependencies {
     name    = "rules-wrapper"
-    version = "0.1.4"
+    version = "0.1.6"
   }
-  */
 
   dependencies {
     name    = "async"

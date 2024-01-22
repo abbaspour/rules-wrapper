@@ -3,3 +3,4 @@ sample/
 node_modules/
 *-lock.yaml
 *-lock.json
+textpad.txt

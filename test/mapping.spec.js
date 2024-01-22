@@ -225,7 +225,9 @@ describe('complex mapping', () => {
                 },
                 body: {}
             },
-            authorization: {roles: []}
+            authorization: {roles: []},
+            app_metadata_change_record: [],
+            user_metadata_change_record: []
         };
 
         const mockRule = _jest.fn();
