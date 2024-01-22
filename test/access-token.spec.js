@@ -34,7 +34,7 @@ describe('handle custom claims', () => {
 
     });
 
-    it('should alter scopes based on context.accessToken.scope', () => {
+    it('should alter scopes based on requested_scopes from front channel', () => {
         const event = {
             transaction: {
                 requested_scopes: ['s1', 's2'],
@@ -61,4 +61,39 @@ describe('handle custom claims', () => {
         expect(api.accessToken.removeScope).toHaveBeenCalledWith('s2');
 
     });
+
+    it('should alter scopes based on request.body from back channel', () => {
+        const event = {
+            transaction: {
+                protocol: 'oauth2-password'
+            },
+            request: {
+                body: {
+                    scope: 's1 s2'
+                }
+            }
+        };
+
+        const api = {
+            accessToken: {
+                addScope: _jest.fn(),
+                removeScope: _jest.fn()
+            }
+        };
+
+        function rule(user, context, callback) {
+            context.accessToken.scope = 's1 s3';
+            callback(null);
+        }
+
+        wrapper.execute([rule], {
+            event,
+            api
+        });
+
+        expect(api.accessToken.addScope).toHaveBeenCalledWith('s3');
+        expect(api.accessToken.removeScope).toHaveBeenCalledWith('s2');
+
+    });
+
 });

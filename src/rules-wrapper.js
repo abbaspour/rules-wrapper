@@ -228,7 +228,7 @@ function wrap(rules) {
         try {
             r(user, context, (err, u, c) => {
                     if (err) {
-                        console.log(`error returned from rule[${i}]: ${JSON.stringify(err)}`);
+                        console.log(`error returned from rule "${r.name}" index ${i}: ${r.name}: ${JSON.stringify(err)}`);
                         callback(err);
                     } else {
                         callback(null, u ? u : user, c ? c : context);
@@ -236,7 +236,7 @@ function wrap(rules) {
                 }
             );
         } catch (e) {
-            console.log(`uncaught error from rule[${i}]: ${e}, ${JSON.stringify(e)}`); // TODO: f() name
+            console.log(`uncaught error from rule "${r.name}" index ${i}: ${e}, ${JSON.stringify(e)}`);
             callback(e);
         }
     });
@@ -249,7 +249,7 @@ exports.execute = (rules, params) => {
         onContinue = false
     } = params;
 
-    console.log(`wrapper received event: ${JSON.stringify(event)}`);
+    // console.log(`wrapper received event: ${JSON.stringify(event)}`);
 
     const _event = structuredClone(event);
 
