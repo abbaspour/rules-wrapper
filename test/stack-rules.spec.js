@@ -5,10 +5,41 @@ const {
     describe,
     it,
     jest: _jest,
+    beforeEach,
 } = require('@jest/globals');
 
+const AuthenticationClient = _jest.fn().mockImplementation((domain, clientId, clientSecret) => {
+    return {
+        oauth: {
+            clientCredentialsGrant: _jest.fn().mockImplementation((audience) => {
+                return {
+                    data: {
+                        access_token: `mock-access-token => domain: ${domain}, clientId: ${clientId}, clientSecret: ${clientSecret ? clientSecret.replace(/./g, 'x') : 'xxx'}, audience: ${audience}`,
+                        expires_in: 86400
+                    }
+                };
+            })
+        }
+    };
+});
+
+beforeEach(() => {
+    _jest.resetModules();
+
+    _jest.mock('auth0', () => {
+        return {AuthenticationClient};
+    });
+});
+
+const cache = {
+    get: _jest.fn().mockImplementation(() => {
+        return 'token';
+    }),
+    set: _jest.fn()
+};
+
 describe('handle multiple rules', () => {
-    it('should changes to user object to reflect in the next rule', () => {
+    it('should changes to user object to reflect in the next rule', async () => {
 
         const event = {
             user: {
@@ -18,7 +49,8 @@ describe('handle multiple rules', () => {
         const api = {
             accessToken: {
                 setCustomClaim: _jest.fn()
-            }
+            },
+            cache
         };
 
         const rule1 = (user, context, callback) => {
@@ -33,13 +65,13 @@ describe('handle multiple rules', () => {
             callback(null);
         };
 
-        wrapper.execute([rule1, rule2], {
+        await wrapper.execute([rule1, rule2], {
             event,
             api
         });
     });
 
-    it('should not call second rule if first one returns error on callback', () => {
+    it('should not call second rule if first one returns error on callback', async () => {
 
         const event = {
             user: {
@@ -49,7 +81,8 @@ describe('handle multiple rules', () => {
         const api = {
             access: {
                 deny: _jest.fn()
-            }
+            },
+            cache
         };
 
         const rule2 = _jest.fn();
@@ -59,7 +92,7 @@ describe('handle multiple rules', () => {
             callback('some-error');
         };
 
-        wrapper.execute([rule1, rule2], {
+        await wrapper.execute([rule1, rule2], {
             event,
             api
         });
@@ -68,7 +101,7 @@ describe('handle multiple rules', () => {
         expect(rule2).not.toBeCalled();
     });
 
-    it('should not call second rule if first one throws error', () => {
+    it('should not call second rule if first one throws error', async () => {
 
         const event = {
             user: {
@@ -78,7 +111,8 @@ describe('handle multiple rules', () => {
         const api = {
             access: {
                 deny: _jest.fn()
-            }
+            },
+            cache
         };
 
         const rule1 = (user, context, callback) => {
@@ -87,7 +121,7 @@ describe('handle multiple rules', () => {
 
         const rule2 = _jest.fn();
 
-        wrapper.execute([rule1, rule2], {
+        await wrapper.execute([rule1, rule2], {
             event,
             api
         });
@@ -100,7 +134,7 @@ describe('handle multiple rules', () => {
 
 
 describe('global object', () => {
-    it('read and write global object', () => {
+    it('read and write global object', async () => {
         const event = {
             user: {
                 email: 'user@example.com'
@@ -109,7 +143,8 @@ describe('global object', () => {
         const api = {
             access: {
                 deny: _jest.fn()
-            }
+            },
+            cache
         };
 
         const rule1 = (user, context, callback) => {
@@ -123,7 +158,7 @@ describe('global object', () => {
             expect(global.f).toBeCalledWith('param');
         };
 
-        wrapper.execute([rule1, rule2], {
+        await wrapper.execute([rule1, rule2], {
             event,
             api
         });

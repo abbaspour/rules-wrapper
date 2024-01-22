@@ -4,8 +4,39 @@ const {
     expect,
     describe,
     it,
-    jest: _jest
+    jest: _jest,
+    beforeEach
 } = require('@jest/globals');
+
+const AuthenticationClient = _jest.fn().mockImplementation((domain, clientId, clientSecret) => {
+    return {
+        oauth: {
+            clientCredentialsGrant: _jest.fn().mockImplementation((audience) => {
+                return {
+                    data: {
+                        access_token: `mock-access-token => domain: ${domain}, clientId: ${clientId}, clientSecret: ${clientSecret ? clientSecret.replace(/./g, 'x') : 'xxx'}, audience: ${audience}`,
+                        expires_in: 86400
+                    }
+                };
+            })
+        }
+    };
+});
+
+beforeEach(() => {
+    _jest.resetModules();
+
+    _jest.mock('auth0', () => {
+        return {AuthenticationClient};
+    });
+});
+
+const cache = {
+    get: _jest.fn().mockImplementation(() => {
+        return 'token';
+    }),
+    set: _jest.fn()
+};
 
 describe('complex mapping', () => {
     const mockEvent = {
@@ -121,7 +152,7 @@ describe('complex mapping', () => {
         }
     };
 
-    it('should do complex mapping', () => {
+    it('should do complex mapping', async () => {
 
         const expectedUser = {
             // TODO _id: '79b1bf64cc40096ecc8d79172ff4e845',
@@ -232,9 +263,9 @@ describe('complex mapping', () => {
 
         const mockRule = _jest.fn();
 
-        wrapper.execute([mockRule], {
+        await wrapper.execute([mockRule], {
             event: mockEvent,
-            api: {}
+            api: {cache}
         });
 
         expect(mockRule).toHaveBeenCalledTimes(1);

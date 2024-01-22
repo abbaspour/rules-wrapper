@@ -18,6 +18,29 @@ resource "local_file" "action-code" {
   })
 }
 
+data "auth0_resource_server" "api_v2" {
+  identifier = "https://${var.auth0_domain}/api/v2/"
+}
+
+resource "auth0_client" "companion-m2m" {
+  name = "Rules Wrapper Companion APIv2 Client users read and update"
+  app_type = "non_interactive"
+  grant_types = [
+    "client_credentials"
+  ]
+}
+
+resource "auth0_client_grant" "companion-m2m-grants" {
+  audience  = data.auth0_resource_server.api_v2.identifier
+  client_id = auth0_client.companion-m2m.client_id
+  scopes    = ["read:users", "update:users"]
+}
+
+data "auth0_client" "companion-m2m" {
+  name = auth0_client.companion-m2m.name
+  client_id = auth0_client.companion-m2m.client_id
+}
+
 resource "auth0_action" "wrapper-action" {
   name    = "Rules Wrapper Action"
   runtime = "node18"
@@ -37,5 +60,25 @@ resource "auth0_action" "wrapper-action" {
   dependencies {
     name    = "async"
     version = "3.2.5"
+  }
+
+  dependencies {
+    name    = "auth0"
+    version = "4.2.0"
+  }
+
+  secrets {
+    name  = "clientId"
+    value = auth0_client.companion-m2m.client_id
+  }
+
+  secrets {
+    name  = "clientSecret"
+    value = data.auth0_client.companion-m2m.client_secret
+  }
+
+  secrets {
+    name  = "domain"
+    value = var.auth0_domain
   }
 }

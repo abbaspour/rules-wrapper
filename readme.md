@@ -7,11 +7,11 @@ function rule01(u, ctx, cb) { }
 function rule02(u, ctx, cb) { }
 
 exports.onExecutePostLogin = async (event, api) => {
-    wrapper.execute([rule01, rule02], {event, api});
+    await wrapper.execute([rule01, rule02], {event, api});
 }
 
 exports.onContinuePostLogin = async (event, api) => {
-    wrapper.execute([rule01, rule02], {event, api, onContinue: true});
+    await wrapper.execute([rule01, rule02], {event, api, onContinue: true});
 }
 ```
 
@@ -31,8 +31,9 @@ see [mapping.md](mapping.md)
 * [x] pre & post redirect 
 * [x] MFA
 * [x] `auth0` object user and app metadata
-* [ ] `auth0` object accessToken
+* [x] `auth0` object accessToken
 * [ ] npm dependencies
+* [ ] Configuration object 
 
 # Not supported 
 * [ ] upstream IdP access_token

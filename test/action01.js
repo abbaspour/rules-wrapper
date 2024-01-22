@@ -14,6 +14,6 @@ exports.onExecutePostLogin = async (event, api) => {
         callback(null);
     }
 
-    wrapper.execute([rule1], {event, api});
+    await wrapper.execute([rule1], {event, api});
 
 };
