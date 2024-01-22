@@ -4,17 +4,50 @@ const {
     expect,
     describe,
     it,
-    jest: _jest
+    jest: _jest,
+    beforeEach
 } = require('@jest/globals');
 
-describe('handle custom claims', () => {
-    it('should call setCustomClaim for all custom claims', () => {
+const AuthenticationClient = _jest.fn().mockImplementation((domain, clientId, clientSecret) => {
+    return {
+        oauth: {
+            clientCredentialsGrant: _jest.fn().mockImplementation((audience) => {
+                return {
+                    data: {
+                        access_token: `mock-access-token => domain: ${domain}, clientId: ${clientId}, clientSecret: ${clientSecret ? clientSecret.replace(/./g, 'x') : 'xxx'}, audience: ${audience}`,
+                        expires_in: 86400
+                    }
+                };
+            })
+        }
+    };
+});
 
-        const event = {};
+beforeEach(() => {
+    _jest.resetModules();
+
+    _jest.mock('auth0', () => {
+        return {AuthenticationClient};
+    });
+});
+
+const cache = {
+    get: _jest.fn().mockImplementation(() => {
+        return 'token';
+    }),
+    set: _jest.fn()
+};
+
+describe('handle custom claims',  () => {
+    it('should call setCustomClaim for all custom claims', async () => {
+
+        const event = {
+        };
         const api = {
             accessToken: {
                 setCustomClaim: _jest.fn()
-            }
+            },
+            cache
         };
 
         function rule(user, context, callback) {
@@ -23,7 +56,7 @@ describe('handle custom claims', () => {
             callback(null);
         }
 
-        wrapper.execute([rule], {
+        await wrapper.execute([rule], {
             event,
             api
         });
@@ -34,7 +67,7 @@ describe('handle custom claims', () => {
 
     });
 
-    it('should alter scopes based on requested_scopes from front channel', () => {
+    it('should alter scopes based on requested_scopes from front channel', async () => {
         const event = {
             transaction: {
                 requested_scopes: ['s1', 's2'],
@@ -44,7 +77,8 @@ describe('handle custom claims', () => {
             accessToken: {
                 addScope: _jest.fn(),
                 removeScope: _jest.fn()
-            }
+            },
+            cache
         };
 
         function rule(user, context, callback) {
@@ -52,7 +86,8 @@ describe('handle custom claims', () => {
             callback(null);
         }
 
-        wrapper.execute([rule], {
+
+        await wrapper.execute([rule], {
             event,
             api
         });
@@ -62,7 +97,7 @@ describe('handle custom claims', () => {
 
     });
 
-    it('should alter scopes based on request.body from back channel', () => {
+    it('should alter scopes based on request.body from back channel', async () => {
         const event = {
             transaction: {
                 protocol: 'oauth2-password'
@@ -78,7 +113,8 @@ describe('handle custom claims', () => {
             accessToken: {
                 addScope: _jest.fn(),
                 removeScope: _jest.fn()
-            }
+            },
+            cache
         };
 
         function rule(user, context, callback) {
@@ -86,7 +122,7 @@ describe('handle custom claims', () => {
             callback(null);
         }
 
-        wrapper.execute([rule], {
+        await wrapper.execute([rule], {
             event,
             api
         });

@@ -7,11 +7,11 @@ function rule01(u, ctx, cb) { }
 function rule02(u, ctx, cb) { }
 
 exports.onExecutePostLogin = async (event, api) => {
-    wrapper.execute([rule01, rule02], {event, api});
+    await wrapper.execute([rule01, rule02], {event, api});
 }
 
 exports.onContinuePostLogin = async (event, api) => {
-    wrapper.execute([rule01, rule02], {event, api, onContinue: true});
+    await wrapper.execute([rule01, rule02], {event, api, onContinue: true});
 }
 ```
 
@@ -30,12 +30,14 @@ see [mapping.md](mapping.md)
 * [x] `global` object simple
 * [x] pre & post redirect 
 * [x] MFA
-* [x] `auth0` object user and app metadata
-* [ ] `auth0` object accessToken
-* [ ] npm dependencies
+* [x] `auth0` object user and app metadata (current user)
+* [ ] `auth0` object user and app metadata (other users)
+* [x] `auth0` object accessToken
+* [ ] Configuration object 
 
 # Not supported 
 * [ ] upstream IdP access_token
+* [ ] npm dependencies (canirequire) vs actions
 
 # Todo
 * [ ] `global` object separation 

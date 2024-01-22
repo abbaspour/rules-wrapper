@@ -252,7 +252,56 @@ function wrap(rules) {
     });
 }
 
-exports.execute = (rules, params) => {
+const API2_CACHE_KEY = 'rules-wrapper-api2-token';
+
+async function getApi2AccessToken(event, api) {
+
+    let {value: token} = api.cache.get(API2_CACHE_KEY) || {};
+
+    if (!token) {
+        const {AuthenticationClient} = require('auth0');
+
+        const {
+            domain,
+            clientId,
+            clientSecret
+        } = event.secrets || {};
+
+        //console.log(domain, clientId);
+
+        const cc = new AuthenticationClient({
+            domain,
+            clientId,
+            clientSecret
+        });
+
+        try {
+            const {data} = await cc.oauth.clientCredentialsGrant({audience: `https://${domain}/api/v2/`});
+
+            token = data?.access_token;
+
+            if (!token) {
+                console.log('failed get api v2 cc token');
+                return 'UNABLE-TO-OBTAIN: unknown';
+            }
+            //console.log('cache MIS for m2m token');
+
+            const result = api.cache.set(API2_CACHE_KEY, token, {ttl: data.expires_in * 1000});
+
+            if (result?.type === 'error') {
+                console.log('failed to set the token in the cache with error code', result.code);
+                return 'UNABLE-TO-OBTAIN: ' + result;
+            }
+        } catch (err) {
+            console.log('failed calling cc grant', err);
+            return 'UNABLE-TO-OBTAIN: ' + err;
+        }
+    }
+
+    return token;
+}
+
+exports.execute = async (rules, params) => {
     const {
         event,
         api,
@@ -268,16 +317,11 @@ exports.execute = (rules, params) => {
 
     if (onContinue) context.protocol = 'redirect-callback';
 
-    // eslint-disable-next-line no-unused-vars
-    // noinspection JSUnusedLocalSymbols,DuplicatedCode
-    // const global = {};
-
-    const canonical_tenant = '???';
-    const domain = '???';
+    const domain = event?.secrets?.domain || event.request?.hostname;
 
     const auth0 = {
-        accessToken: 'TODO',
-        baseUrl: `https://${canonical_tenant}/api/v2`,
+        accessToken: await getApi2AccessToken(event, api),
+        baseUrl: `https://${domain}/api/v2`,
         domain,
         users: {
             updateAppMetadata: function (user_id, metadata) {

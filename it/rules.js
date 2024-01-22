@@ -36,3 +36,19 @@ function metadata(user, context, callback) {
     auth0.users.updateUserMetadata(user.user_id, {'u1': 'v2'});
     callback();
 }
+
+
+async function user_search(user, context, callback) {
+    // const { ManagementClient } = require('auth0').ManagementClient;
+    const { ManagementClient } = require('auth0');
+
+    const management = new ManagementClient({
+        token: auth0.accessToken,
+        domain: auth0.domain
+    });
+
+    const {data} = await management.users.getAll();
+    console.log(JSON.stringify(data));
+
+    callback();
+}

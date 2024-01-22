@@ -4,14 +4,45 @@ const {
     expect,
     describe,
     it,
-    jest: _jest
+    jest: _jest,
+    beforeEach
 } = require('@jest/globals');
+
+const AuthenticationClient = _jest.fn().mockImplementation((domain, clientId, clientSecret) => {
+    return {
+        oauth: {
+            clientCredentialsGrant: _jest.fn().mockImplementation((audience) => {
+                return {
+                    data: {
+                        access_token: `mock-access-token => domain: ${domain}, clientId: ${clientId}, clientSecret: ${clientSecret ? clientSecret.replace(/./g, 'x') : 'xxx'}, audience: ${audience}`,
+                        expires_in: 86400
+                    }
+                };
+            })
+        }
+    };
+});
+
+beforeEach(() => {
+    _jest.resetModules();
+
+    _jest.mock('auth0', () => {
+        return {AuthenticationClient};
+    });
+});
+
+const cache = {
+    get: _jest.fn().mockImplementation(() => {
+        return 'token';
+    }),
+    set: _jest.fn()
+};
 
 describe('handle custom claims', () => {
 
     const testSigningCert = '-----BEGIN CERTIFICATE-----\nMIIC8jCCAdqgAwIBAgIJObB6jmhG0QIEMA0GCSqGSIb3DQEBBQUAMCAxHjAcBgNV\n[..all the other lines..]-----END CERTIFICATE-----\n';
 
-    it('should call setCustomClaim for all custom claims', () => {
+    it('should call setCustomClaim for all custom claims', async () => {
 
         const event = {};
         const api = {
@@ -33,7 +64,8 @@ describe('handle custom claims', () => {
                 setTypedAttributes: _jest.fn(),
                 setLifetimeInSeconds: _jest.fn(),
                 setSigningCert: _jest.fn(),
-            }
+            },
+            cache
         };
 
         function rule(user, context, callback) {
@@ -57,7 +89,7 @@ describe('handle custom claims', () => {
             callback(null);
         }
 
-        wrapper.execute([rule], {
+        await wrapper.execute([rule], {
             event,
             api
         });
