@@ -23,3 +23,7 @@ see [mapping.md](mapping.md)
 
 # Todo
 * [ ] `global` object fields write back to cache
+
+# References
+* https://auth0team.atlassian.net/servicedesk/customer/portal/9/DR-2055?created=true
+* https://auth0team.atlassian.net/servicedesk/customer/portal/34/ESD-33960?created=true
