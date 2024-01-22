@@ -20,8 +20,13 @@ function redirect(user, context, callback) {
 function saml(user, context, callback) {
     context.samlConfiguration.signatureAlgorithm = 'rsa-sha256';
     context.samlConfiguration.nameIdentifierProbes = [
-        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'
     ];
 
+    callback();
+}
+
+function accessTokenScopes(user, context, callback) {
+    context.accessToken.scope = 's1 s2 s3';
     callback();
 }

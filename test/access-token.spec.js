@@ -7,8 +7,8 @@ const {
     jest: _jest
 } = require('@jest/globals');
 
-describe('handle SAML mapping', () => {
-    it('basic saml mapping', () => {
+describe('handle custom claims', () => {
+    it('should call setCustomClaim for all custom claims', () => {
 
         const event = {};
         const api = {
@@ -23,7 +23,10 @@ describe('handle SAML mapping', () => {
             callback(null);
         }
 
-        wrapper.execute([rule], {event, api});
+        wrapper.execute([rule], {
+            event,
+            api
+        });
 
         expect(api.accessToken.setCustomClaim).toHaveBeenCalledTimes(2);
         expect(api.accessToken.setCustomClaim).toHaveBeenNthCalledWith(1, 'k1', 'v1');
@@ -31,5 +34,31 @@ describe('handle SAML mapping', () => {
 
     });
 
-    // TODO: scopes alteration tests
+    it('should alter scopes based on context.accessToken.scope', () => {
+        const event = {
+            transaction: {
+                requested_scopes: ['s1', 's2'],
+            },
+        };
+        const api = {
+            accessToken: {
+                addScope: _jest.fn(),
+                removeScope: _jest.fn()
+            }
+        };
+
+        function rule(user, context, callback) {
+            context.accessToken.scope = 's1 s3';
+            callback(null);
+        }
+
+        wrapper.execute([rule], {
+            event,
+            api
+        });
+
+        expect(api.accessToken.addScope).toHaveBeenCalledWith('s3');
+        expect(api.accessToken.removeScope).toHaveBeenCalledWith('s2');
+
+    });
 });
