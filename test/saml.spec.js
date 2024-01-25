@@ -44,7 +44,11 @@ describe('handle custom claims', () => {
 
     it('should call setCustomClaim for all custom claims', async () => {
 
-        const event = {};
+        const event = {
+            user : {
+                user_id : 'u123'
+            }
+        };
         const api = {
             samlResponse: {
                 setAudience: _jest.fn(),
@@ -64,6 +68,7 @@ describe('handle custom claims', () => {
                 setTypedAttributes: _jest.fn(),
                 setLifetimeInSeconds: _jest.fn(),
                 setSigningCert: _jest.fn(),
+                setAttribute: _jest.fn(),
             },
             cache
         };
@@ -86,6 +91,9 @@ describe('handle custom claims', () => {
             context.samlConfiguration.typedAttributes = true;
             context.samlConfiguration.lifetimeInSeconds = 3600;
             context.samlConfiguration.signingCert = testSigningCert;
+            context.samlConfiguration.mappings = {
+                'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/PPID': 'user_id'
+            };
             callback(null);
         }
 
@@ -111,6 +119,7 @@ describe('handle custom claims', () => {
         expect(api.samlResponse.setTypedAttributes).toHaveBeenCalledWith(true);
         expect(api.samlResponse.setLifetimeInSeconds).toHaveBeenCalledWith(3600);
         expect(api.samlResponse.setSigningCert).toHaveBeenCalledWith(testSigningCert);
+        expect(api.samlResponse.setAttribute).toHaveBeenCalledWith('http://schemas.xmlsoap.org/ws/2005/05/identity/claims/PPID', 'u123');
 
     });
 });
