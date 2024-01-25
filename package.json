@@ -1,6 +1,6 @@
 {
   "name": "rules-wrapper",
-  "version": "0.1.6",
+  "version": "0.1.8",
   "description": "Auth0 rules-wrapper to allow calling Rules inside Actions",
   "main": "src/rules-wrapper.js",
   "scripts": {

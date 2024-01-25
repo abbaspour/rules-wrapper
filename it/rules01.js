@@ -22,7 +22,9 @@ function saml(user, context, callback) {
     context.samlConfiguration.nameIdentifierProbes = [
         'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'
     ];
-
+    context.samlConfiguration.mappings = {
+        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/PPID': 'user_id'
+    };
     callback();
 }
 

@@ -30,18 +30,19 @@ see [mapping.md](mapping.md)
 * [x] `global` object simple
 * [x] pre & post redirect 
 * [x] MFA
-* [x] `auth0` object user and app metadata (current user)
-* [ ] `auth0` object user and app metadata (other users)
+* [x] `auth0` object user and app metadata for current user
 * [x] `auth0` object accessToken
 * [ ] Configuration object 
 
 # Not supported 
-* [ ] upstream IdP access_token
+* [ ] SAML mapping for [issuer, logout and binding](https://auth0team.atlassian.net/servicedesk/customer/portal/34/ESD-33960) 
 * [ ] npm dependencies (canirequire) vs actions
+* [ ] global_client_id
+
+# Out of scope
+* [x] `auth0` object user and app metadata for other users
 
 # Todo
-* [ ] `global` object separation 
-* [ ] `global` object fields write back to cache
 * [ ] log level param
 
 # References

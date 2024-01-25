@@ -29,7 +29,9 @@ function mapToContext(event) {
         connectionOptions: {},
         accessToken: {},
         idToken: {},
-        samlConfiguration: {},
+        samlConfiguration: {
+            mappings: {}
+        },
         // TODO multifactor: {},
         // TODO redirect: {},
         app_metadata_change_record: [],
@@ -166,10 +168,18 @@ function diffAndCallApi(event, user, context, auth0, api) {
     }
 
     /*
+    // TODO: missing issuer, logout, binding
     if (context.samlConfiguration.issuer) {
         api.samlResponse.setIssuer(context.samlConfiguration.issuer);
     }
     */
+    if (isNotEmpty(context?.samlConfiguration?.mappings))
+        Object.entries(context.samlConfiguration.mappings)?.forEach(([key, value]) => api.samlResponse.setAttribute(key, user[value]));
+
+    if (context.samlConfiguration.createUpnClaim) {
+        api.samlResponse.setCreateUpnClaim(context.samlConfiguration.createUpnClaim);
+    }
+
     if (context.samlConfiguration.createUpnClaim) {
         api.samlResponse.setCreateUpnClaim(context.samlConfiguration.createUpnClaim);
     }
@@ -305,7 +315,8 @@ exports.execute = async (rules, params) => {
     const {
         event,
         api,
-        onContinue = false
+        onContinue = false,
+        withCompanionApp = true
     } = params;
 
     // console.log(`wrapper received event: ${JSON.stringify(event)}`);
@@ -320,7 +331,7 @@ exports.execute = async (rules, params) => {
     const domain = event?.secrets?.domain || event.request?.hostname;
 
     const auth0 = {
-        accessToken: await getApi2AccessToken(event, api),
+        accessToken: withCompanionApp ? await getApi2AccessToken(event, api) : 'MISSING-COMPANION-APP',
         baseUrl: `https://${domain}/api/v2`,
         domain,
         users: {

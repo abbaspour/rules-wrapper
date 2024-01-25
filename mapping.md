@@ -47,7 +47,7 @@ and
 | audience                          | string  | `.setAudience()`                       | 
 | recipient	                        | string  | `.setRecipient()`                      | 
 | issuer                            | string  | ???                                    | 
-| mappings                          | object  | ???                                    | 
+| mappings                          | object  | `.setAttribute()`                      | 
 | createUpnClaim                    | boolean | `.setCreateUpnClaim()`                 | 
 | passthroughClaimsWithNoMapping    | boolean | `.setPassthroughClaimsWithNoMapping()` | 
 | mapUnknownClaimsAsIs              | boolean | `.setMapUnknownClaimsAsIs()`           | 

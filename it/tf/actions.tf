@@ -1,5 +1,5 @@
 data "local_file" "rules" {
-  filename = "../rules.js"
+  filename = "../rules01.js"
 }
 
 data "local_file" "wrapper" {
@@ -12,10 +12,11 @@ resource "local_file" "action-code" {
     rules_source   = data.local_file.rules.content
     wrapper_source = data.local_file.wrapper.content
     #rule_names     = "id_token_claim, redirect"
-    #rule_names     = "id_token_claim, saml"
+    rule_names     = "id_token_claim, saml"
     //rule_names     = "accessTokenScopes"
     //rule_names     = "metadata"
-    rule_names     = "user_search"
+    #rule_names     = "user_search"
+    #rule_names     = "restrictClientRule,enrichTokens"
   })
 }
 
