@@ -36,7 +36,7 @@ see [mapping.md](mapping.md)
 
 # Not supported 
 * [ ] SAML mapping for [issuer, logout and binding](https://auth0team.atlassian.net/servicedesk/customer/portal/34/ESD-33960) 
-* [ ] npm dependencies (canirequire) vs actions
+* [ ] npm dependencies (Rules [verequire()](https://github.com/auth0/verquire/blob/master/lib/verquire.js#L14-L44)) vs actions dependencies
 * [ ] global_client_id
 
 # Out of scope
