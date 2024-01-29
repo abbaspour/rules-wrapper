@@ -32,12 +32,14 @@ see [mapping.md](mapping.md)
 * [x] MFA
 * [x] `auth0` object user and app metadata for current user
 * [x] `auth0` object accessToken
-* [ ] Configuration object 
+* [x] configuration object populated from secrets 
+* [x] global_client_id
 
-# Not supported 
+# Not supported
 * [ ] SAML mapping for [issuer, logout and binding](https://auth0team.atlassian.net/servicedesk/customer/portal/34/ESD-33960) 
-* [ ] npm dependencies (Rules [verequire()](https://github.com/auth0/verquire/blob/master/lib/verquire.js#L14-L44)) vs actions dependencies
-* [ ] global_client_id
+* [ ] Complex module names dependencies (Rules [verequire()](https://github.com/auth0/verquire/blob/master/lib/verquire.js#L14-L44)) vs actions dependencies
+* [ ] context fields `sessionID`, `auth0SessionId`, `sso` and `jwtConfiguration`
+* [ ] [upstream IdP access_token](https://auth0.com/docs/customize/actions/limitations) 
 
 # Out of scope
 * [x] `auth0` object user and app metadata for other users

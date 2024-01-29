@@ -20,10 +20,10 @@
 | `.transaction.protocol`          | `.protocol`           |           
 | `.transaction.locale`            | `.locale`             |
 | `.secrets`                       | `.configuration`      |
-| N/A TBC?                         | `.jwtConfiguration`   |
-| TBC?                             | `.sso`                |
-| N/A                              | `.sessionID`          |
-| N/A                              | `.auth0SessionId`     |
+| ???                              | `.jwtConfiguration`   |
+| ???                              | `.sso`                |
+| ???                              | `.sessionID`          |
+| ???                              | `.auth0SessionId`     |
 
 ## Methods
 
@@ -44,38 +44,38 @@ and
 
 | Rules `context.samlConfiguration` | Type    | Action `api.samlResponse`              |
 |:----------------------------------|:--------|:---------------------------------------|
-| audience                          | string  | `.setAudience()`                       | 
-| recipient	                        | string  | `.setRecipient()`                      | 
-| issuer                            | string  | ???                                    | 
-| mappings                          | object  | `.setAttribute()`                      | 
-| createUpnClaim                    | boolean | `.setCreateUpnClaim()`                 | 
-| passthroughClaimsWithNoMapping    | boolean | `.setPassthroughClaimsWithNoMapping()` | 
-| mapUnknownClaimsAsIs              | boolean | `.setMapUnknownClaimsAsIs()`           | 
-| mapIdentities	                    | boolean | `.setMapIdentities()`                  | 
-| signatureAlgorithm                | string  | `.setSignatureAlgorithm()`             | 
-| digestAlgorithm                   | string  | `.setDigestAlgorithm()`                | 
-| destination                       | object? | `.setDestination()`                    | 
-| lifetimeInSeconds                 | integer | `.setLifetimeInSeconds()`              | 
-| signResponse                      | boolean | `.setSignResponse()`                   | 
-| nameIdentifierFormat              | string  | `.setNameIdentifierFormat()            | 
-| nameIdentifierProbes              | array   | `.setNameIdentifierProbes()`           | 
-| authnContextClassRef              | string  | `.setAuthnContextClassRef()`           | 
-| typedAttributes                   | boolean | `.setTypedAttributes()`                | 
-| includeAttributeNameFormat        | boolean | `.setIncludeAttributeNameFormat()`     | 
-| logout                            | object  | ???                                    | 
-| binding                           | string  | ???                                    | 
-| signingCert                       | string  | `.setSigningCert()`                    |  
+| `.audience`                       | string  | `.setAudience()`                       | 
+| `.recipient`                      | string  | `.setRecipient()`                      | 
+| `.mappings`                       | object  | `.setAttribute()`                      | 
+| `.createUpnClaim`                 | boolean | `.setCreateUpnClaim()`                 | 
+| `.passthroughClaimsWithNoMapping` | boolean | `.setPassthroughClaimsWithNoMapping()` | 
+| `.mapUnknownClaimsAsIs`           | boolean | `.setMapUnknownClaimsAsIs()`           | 
+| `.mapIdentities`                  | boolean | `.setMapIdentities()`                  | 
+| `.signatureAlgorithm`             | string  | `.setSignatureAlgorithm()`             | 
+| `.digestAlgorithm`                | string  | `.setDigestAlgorithm()`                | 
+| `.destination`                    | object? | `.setDestination()`                    | 
+| `.lifetimeInSeconds`              | integer | `.setLifetimeInSeconds()`              | 
+| `.signResponse`                   | boolean | `.setSignResponse()`                   | 
+| `.nameIdentifierFormat`           | string  | `.setNameIdentifierFormat()            | 
+| `.nameIdentifierProbes`           | array   | `.setNameIdentifierProbes()`           | 
+| `.authnContextClassRef`           | string  | `.setAuthnContextClassRef()`           | 
+| `.typedAttributes`                | boolean | `.setTypedAttributes()`                | 
+| `.includeAttributeNameFormat`     | boolean | `.setIncludeAttributeNameFormat()`     | 
+| `.signingCert`                    | string  | `.setSigningCert()`                    |  
+| `.issuer`                         | string  | ???                                    | 
+| `.logout`                         | object  | ???                                    | 
+| `.binding`                        | string  | ???                                    | 
 
 # User Mapping
 
 ## Attributes
 
-| Action `event`          | Rules `user`        |
-|:------------------------|:--------------------|
-| `.user`                 | `.`                 |
-| `.client.clent_id`      | `.clientID`  TBC?   |
-| ?                       | `.global_client_id` |
-| `.identities.[].userId` | -                   | 
+| Action `event`           | Rules `user`        |
+|:-------------------------|:--------------------|
+| `.user`                  | `.`                 |
+| `.client.clent_id`       | `.clientID`         |
+| Secrets.global_client_id | `.global_client_id` |
+| `.identities.[].userId`  | -                   | 
 
 ## Methods
 

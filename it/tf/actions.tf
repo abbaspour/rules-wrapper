@@ -43,6 +43,10 @@ data "auth0_client" "companion-m2m" {
   client_id = auth0_client.companion-m2m.client_id
 }
 
+data "auth0_client" "global_client" {
+  name = "All Applications"
+}
+
 resource "auth0_action" "wrapper-action" {
   name    = "Rules Wrapper Action"
   runtime = "node18"
@@ -83,4 +87,13 @@ resource "auth0_action" "wrapper-action" {
     name  = "domain"
     value = var.auth0_domain
   }
+
+  secrets {
+    name  = "global_client_id"
+    value = data.auth0_client.global_client.client_id
+  }
+}
+
+output "global_client_id" {
+  value = data.auth0_client.global_client.client_id
 }

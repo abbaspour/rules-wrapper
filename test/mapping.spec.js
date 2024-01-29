@@ -174,7 +174,7 @@ describe('complex mapping', () => {
             multifactor: ['guardian'],
             // TODO multifactor_last_modified: '2023-12-15T02:52:27.100Z',
             last_password_reset: '2023-12-15T03:20:33.206Z',
-            // TODO global_client_id: 'indMoL7Aya109w09tV5Ei4gdTf1DmKL1',
+            global_client_id: 'MISSING-GLOBAL-ID-IN-SECRETS',
             app_metadata: {crm_customer_id: 1234},
             crm_customer_id: 1234,
             // TODO persistent: {}
@@ -191,7 +191,9 @@ describe('complex mapping', () => {
             connectionID: 'con_UZwhZkh05jv7Gsg0',
             connectionOptions: {},
             connectionMetadata: {},
-            samlConfiguration: {},
+            samlConfiguration: {
+                mappings: {}
+            },
             jwtConfiguration: {},
             protocol: 'oidc-implicit-profile',
             stats: {loginsCount: 35},
