@@ -32,8 +32,6 @@ function mapToContext(event) {
         samlConfiguration: {
             mappings: {}
         },
-        // TODO multifactor: {},
-        // TODO redirect: {},
         app_metadata_change_record: [],
         user_metadata_change_record: []
     };
@@ -94,6 +92,7 @@ function mapToUser(event) {
     const user = {
         ...event?.user,
         clientID: event?.client?.client_id,
+        global_client_id: event?.secrets?.global_client_id ? event?.secrets?.global_client_id : 'MISSING-GLOBAL-ID-IN-SECRETS'
     };
 
     user?.identities?.forEach(i => delete (i.userId));
