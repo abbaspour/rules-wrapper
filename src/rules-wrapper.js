@@ -64,6 +64,7 @@ function mapToContext(event) {
 
     if (isNotEmpty(event?.secrets)) {
         context.configuration = event.secrets;
+        context.configuration = event.secrets;
     }
 
     context?.authentication?.methods.forEach(m => {
@@ -92,7 +93,7 @@ function mapToUser(event) {
     const user = {
         ...event?.user,
         clientID: event?.client?.client_id,
-        global_client_id: event?.secrets?.global_client_id ? event?.secrets?.global_client_id : 'MISSING-GLOBAL-ID-IN-SECRETS'
+        global_client_id: event?.secrets?.global_client_id ? event.secrets.global_client_id : 'MISSING-GLOBAL-ID-IN-SECRETS'
     };
 
     user?.identities?.forEach(i => delete (i.userId));

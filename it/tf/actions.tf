@@ -1,6 +1,8 @@
+/*
 data "local_file" "rules" {
   filename = "../rules01.js"
 }
+*/
 
 data "local_file" "wrapper" {
   filename = "../../src/rules-wrapper.js"
@@ -8,8 +10,11 @@ data "local_file" "wrapper" {
 
 resource "local_file" "action-code" {
   filename = "../.rendered/action.js"
-  content  = templatefile("../action.tpl.js", {
-    rules_source   = data.local_file.rules.content
+  content  = templatefile("../action.tftpl.js", {
+    rules = [
+      auth0_rule.rule-globals.script
+    ],
+    //rules_source   = data.local_file.rules.content
     wrapper_source = data.local_file.wrapper.content
     #rule_names     = "id_token_claim, redirect"
     rule_names     = "id_token_claim, saml"
@@ -38,6 +43,7 @@ resource "auth0_client_grant" "companion-m2m-grants" {
   scopes    = ["read:users", "update:users"]
 }
 
+/* can't use global client. missing cc grant :( can use HS256 and build auth0 token though  */
 data "auth0_client" "companion-m2m" {
   name = auth0_client.companion-m2m.name
   client_id = auth0_client.companion-m2m.client_id

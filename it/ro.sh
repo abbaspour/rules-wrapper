@@ -14,7 +14,7 @@ declare -r auth0_domain=$(awk -F= '/^auth0_domain/{print $2}' ${tfvars} | tr -d 
 
 declare BODY=$(cat <<EOL
 {
-  "scope": "s1 s2",
+  "scope": "read:user update:user delete:user",
   "audience": "my.rs",
   "grant_type": "http://auth0.com/oauth/grant-type/password-realm",
   "realm" : "${connection}",

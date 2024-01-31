@@ -3,15 +3,16 @@ resource "auth0_tenant" "tenant_config" {
   flags {
     enable_client_connections = false
   }
+  sandbox_version = "18"
 }
 
 # simple SPA client
 resource "auth0_client" "jwt-io" {
-  name = "JWT.io"
-  description = "JWT.io SPA client"
-  app_type = "spa"
+  name            = "JWT.io"
+  description     = "JWT.io SPA client"
+  app_type        = "spa"
   oidc_conformant = true
-  is_first_party = true
+  is_first_party  = true
 
   callbacks = [
     "https://jwt.io"
@@ -49,10 +50,10 @@ resource "auth0_connection_clients" "db_clients" {
 }
 
 resource "auth0_resource_server" "rs" {
-  name = "Sample Resource Server"
+  name       = "Sample Resource Server"
   identifier = "my.rs"
 
-  allow_offline_access = true
+  allow_offline_access                            = true
   skip_consent_for_verifiable_first_party_clients = true
 }
 
@@ -60,29 +61,41 @@ resource "auth0_resource_server_scopes" "my_api_scopes" {
   resource_server_identifier = auth0_resource_server.rs.identifier
 
   scopes {
-    name        = "s1"
-    description = "scope 1"
+    name        = "read:user"
+    description = "allow read user"
   }
 
   scopes {
-    name        = "s2"
-    description = "scope 2"
+    name        = "update:user"
+    description = "allow update user"
   }
 
   scopes {
-    name        = "s3"
-    description = "scope 3"
+    name        = "delete:user"
+    description = "allow delete user for admin roles only"
   }
 }
 
 ## Users
 resource "auth0_user" "user_1" {
-  depends_on = [auth0_connection_clients.db_clients]
+  depends_on      = [auth0_connection_clients.db_clients]
   connection_name = data.auth0_connection.db.name
-  email = var.user1_email
-  password = var.default_password
-  given_name = "User1"
-  family_name = "Tester"
+  email           = var.user1_email
+  password        = var.default_password
+  given_name      = "User1"
+  family_name     = "Tester"
+}
+
+resource "auth0_user" "user_admin" {
+  depends_on      = [auth0_connection_clients.db_clients]
+  connection_name = data.auth0_connection.db.name
+  email           = "admin@atko.email"
+  password        = var.default_password
+  given_name      = "Admin"
+  family_name     = "Tester"
+  app_metadata    = jsonencode({
+    role : "admin"
+  })
 }
 
 ## outputs
