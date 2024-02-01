@@ -13,12 +13,6 @@ function saml(user, context, callback) {
         };
 
 
-        const { role } = user.app_metadata || {};
-
-        if (role === 'admin') {
-            error(`admin user ${user.email} not allowed to do SAML`);
-            return callback('SAML not allowed for admin users');
-        }
     }
 
 

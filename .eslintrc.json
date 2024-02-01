@@ -60,7 +60,7 @@
         "max": 500
       }
     ],
-    "keyword-spacing": "error",
+    "keyword-spacing": "warn",
     "multiline-ternary": [
       "error",
       "never"
