@@ -1,9 +1,14 @@
 /** wrapper **/
-${wrapper_source}
+const wrapper = require('rules-wrapper');
+
+/*
+{wrapper_source}
+*/
 
 /** rules **/
 %{ for r in rules ~}
 ${r}
+
 %{ endfor ~}
 
 
@@ -15,7 +20,7 @@ ${r}
  */
 exports.onExecutePostLogin = async (event, api) => {
     try {
-        await exports.execute([${rule_names}], {event, api});
+        await wrapper.execute([${rule_names}], {event, api});
     } catch (e) {
         console.log(`error from onExecutePostLogin wrapper execution: $${JSON.stringify(e)}`);
     }
@@ -31,7 +36,7 @@ exports.onExecutePostLogin = async (event, api) => {
  */
 exports.onContinuePostLogin = async (event, api) => {
     try {
-        await exports.execute([${rule_names}], {event, api, onContinue: true});
+        await wrapper.execute([${rule_names}], {event, api, onContinue: true});
     } catch (e) {
         console.log(`error from onContinuePostLogin wrapper execution: $${JSON.stringify(e)}`);
     }

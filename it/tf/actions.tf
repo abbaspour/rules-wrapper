@@ -16,7 +16,7 @@ resource "local_file" "action-code" {
       auth0_rule.rule-control-scopes.script,
       auth0_rule.rule-final.script,
     ],
-    wrapper_source = data.local_file.wrapper.content
+    //wrapper_source = data.local_file.wrapper.content
     rule_names     = "globals, dump, claims, saml, redirect, metadata, link, scopes"
   })
 }
@@ -62,7 +62,7 @@ resource "auth0_action" "wrapper-action" {
 
   dependencies {
     name    = "rules-wrapper"
-    version = "0.1.6"
+    version = "0.1.9"
   }
 
   dependencies {
