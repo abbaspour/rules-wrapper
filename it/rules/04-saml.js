@@ -1,6 +1,5 @@
 function saml(user, context, callback) {
     const info = global.info;
-    const error = global.error;
 
     if (context.protocol === 'samlp') {
         info('detected SAML federation. setting samlConfiguration');
@@ -11,8 +10,6 @@ function saml(user, context, callback) {
         context.samlConfiguration.mappings = {
             'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/PPID': 'user_id'
         };
-
-
     }
 
 

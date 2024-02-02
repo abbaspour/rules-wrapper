@@ -31,7 +31,7 @@ async function link(user, context, callback) {
     const firstCandidate = candidateUsers.find((c) =>
             c.user_id !== user.user_id                  // not the current user
             && c.identities[0].provider === 'auth0'     // DB user
-        //&& c.email_verified                         // make sure email is verified
+        //&& c.email_verified                           // make sure email is verified
     );
 
     if (!firstCandidate) { // didn't find any other user with the same email other than ourselves
@@ -42,15 +42,15 @@ async function link(user, context, callback) {
     client.linkUsers(firstCandidate.user_id, {
         provider: user.identities[0].provider,
         user_id: user.identities[0].user_id
-    }, function (err, user) {
+    }, function (err) {
         if (err) {
             error(`unable to link social user ${user.user_id} to dn ${firstCandidate.user_id} successful due to ${err}`);
             return callback(null, user, context);
         }
-
-        info(`linked current social user ${user.user_id} to new DB primary ${firstCandidate.user_id} successful.`);
-        context.primaryUser = firstCandidate.user_id;
-
-        return callback(null, user, context);
     });
+    info(`linked current social user ${user.user_id} to new DB primary ${firstCandidate.user_id} successful.`);
+
+    context.primaryUser = firstCandidate.user_id;
+
+    return callback(null, user, context);
 }

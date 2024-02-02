@@ -105,7 +105,8 @@ function diffAndCallApi(event, user, context, auth0, api) {
 
     // -- PrimaryUserId --
     if (context?.primaryUser) {
-        api.authentication.setPrimaryUserId(context.primaryUser);
+        console.log(`api.authentication.setPrimaryUser(${context.primaryUser})`);
+        api.authentication.setPrimaryUser(context.primaryUser);
     }
 
     // -- Access Token -- (claims)
@@ -286,7 +287,7 @@ async function getApi2AccessToken(event, api) {
         });
 
         try {
-            const {data} = await cc.oauth.clientCredentialsGrant({audience: `https://${domain}/api/v2/`});
+            const data = await cc.oauth.clientCredentialsGrant({audience: `https://${domain}/api/v2/`});
 
             token = data?.access_token;
 
@@ -347,7 +348,7 @@ exports.execute = async (rules, params) => {
                 if (user_id !== _event?.user?.user_id) {
                     console.log(`WARN: updateUserMetadata() for user_id(${user_id}) other than current user (${_event.user.user_id}) is unsupported.`);
                 } else {
-                    console.log(`adding to updateUserMetadata(${metadata})`);
+                    console.log(`adding to updateUserMetadata(${JSON.stringify(metadata)})`);
                     context.user_metadata_change_record.push(metadata);
                 }
             }
