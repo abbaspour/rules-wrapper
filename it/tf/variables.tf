@@ -25,3 +25,8 @@ variable "user1_email" {
   type = string
   description = "email for test users"
 }
+
+variable "social_user_email" {
+  type = string
+  description = "email for social users"
+}

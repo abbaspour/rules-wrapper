@@ -86,6 +86,15 @@ resource "auth0_user" "user_1" {
   family_name     = "Tester"
 }
 
+resource "auth0_user" "user_2" {
+  depends_on      = [auth0_connection_clients.db_clients]
+  connection_name = data.auth0_connection.db.name
+  email           = var.social_user_email
+  password        = var.default_password
+  given_name      = "Social"
+  family_name     = "User"
+}
+
 resource "auth0_user" "user_admin" {
   depends_on      = [auth0_connection_clients.db_clients]
   connection_name = data.auth0_connection.db.name
@@ -96,6 +105,21 @@ resource "auth0_user" "user_admin" {
   app_metadata    = jsonencode({
     role : "admin"
   })
+}
+
+## Social (for linking demo)
+data "auth0_connection" "google" {
+  name = "google-oauth2"
+}
+
+resource "auth0_connection_clients" "google_clients" {
+  connection_id   = data.auth0_connection.google.id
+  enabled_clients = [auth0_client.jwt-io.id]
+  lifecycle {
+    ignore_changes = [
+      enabled_clients
+    ]
+  }
 }
 
 ## outputs
