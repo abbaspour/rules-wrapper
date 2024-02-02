@@ -1,11 +1,14 @@
 function scopes(user, context, callback) {
 
     const info = global.info;
-    const error = global.error;
 
-    const { role } = user.app_metadata || {};
+    const audience = context.protocol === 'oauth2-password'? context.request.body.audience : context.request.query.audience;
 
-    const {scope} = context.accessToken || {};
+    if(!audience || audience !== 'my.rs') {
+        return callback(null, user, context);
+    }
+
+    const scope = context.protocol === 'oauth2-password'? context.request.body.scope : context.request.query.scope;
 
     if (!scope) return callback(null, user, context);
 
@@ -13,12 +16,16 @@ function scopes(user, context, callback) {
 
     const scopes = scope.split(' ');
 
+    const { role } = user.app_metadata || {};
+
     if (role === 'admin') {
-        info(`user ${user.email} has admin role. skipping scopes check`);
+        info(`user ${user.email} has admin role. skipping scopes check. checking MFA`);
 
-        const done_mfa = context.authentication.find(o => o.name === 'mfa');
+        const authentication_methods = context.authentication.methods || [];
+        const done_mfa = authentication_methods.find(m => m.name === 'mfa');
 
-        const alter_user_scopes = scopes.includes('update:user') || scopes.includes('delete:user')
+        const alter_user_scopes = scopes.includes('update:user') || scopes.includes('delete:user');
+
         if (!done_mfa && alter_user_scopes) {
             info('admin user requires MFA to alter users');
             context.multifactor = {
@@ -29,19 +36,10 @@ function scopes(user, context, callback) {
         return callback(null, user, context);
     }
 
-    let found = true;
-    do {
-        const index = scopes.findIndex('delete:user');
-        found = index !== -1;
-        if (found) {
-            delete scopes[index];
-            error('non-admin users cannot request delete:user. removing');
-        }
-    } while (found);
+    const filtered_scopes = scopes.filter(s => s !== 'delete:user');
 
-    const filtered_scopes = scopes.join(' ');
     info(`>>> filtered scopes: ${JSON.stringify(filtered_scopes)}`);
-    context.accessToken.scope = filtered_scopes;
+    context.accessToken.scope = filtered_scopes.join(' ');
 
     return callback(null, user, context);
 }

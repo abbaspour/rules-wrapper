@@ -84,6 +84,11 @@ resource "auth0_user" "user_1" {
   password        = var.default_password
   given_name      = "User1"
   family_name     = "Tester"
+  lifecycle {
+    ignore_changes = [
+      app_metadata, user_metadata
+    ]
+  }
 }
 
 resource "auth0_user" "user_2" {
@@ -93,6 +98,11 @@ resource "auth0_user" "user_2" {
   password        = var.default_password
   given_name      = "Social"
   family_name     = "User"
+  lifecycle {
+    ignore_changes = [
+      app_metadata, user_metadata
+    ]
+  }
 }
 
 resource "auth0_user" "user_admin" {
@@ -105,6 +115,11 @@ resource "auth0_user" "user_admin" {
   app_metadata    = jsonencode({
     role : "admin"
   })
+  lifecycle {
+    ignore_changes = [
+      app_metadata, user_metadata
+    ]
+  }
 }
 
 ## Social (for linking demo)
