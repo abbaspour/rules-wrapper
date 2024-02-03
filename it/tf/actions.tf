@@ -1,22 +1,23 @@
-data "local_file" "rules" {
-  filename = "../rules01.js"
-}
-
 data "local_file" "wrapper" {
   filename = "../../src/rules-wrapper.js"
 }
 
 resource "local_file" "action-code" {
   filename = "../.rendered/action.js"
-  content  = templatefile("../action.tpl.js", {
-    rules_source   = data.local_file.rules.content
-    wrapper_source = data.local_file.wrapper.content
-    #rule_names     = "id_token_claim, redirect"
-    rule_names     = "id_token_claim, saml"
-    //rule_names     = "accessTokenScopes"
-    //rule_names     = "metadata"
-    #rule_names     = "user_search"
-    #rule_names     = "restrictClientRule,enrichTokens"
+  content  = templatefile("../action.tftpl.js", {
+    rules = [
+      auth0_rule.rule-globals.script,
+      auth0_rule.rule-dump.script,
+      auth0_rule.rule-claims.script,
+      auth0_rule.rule-saml.script,
+      auth0_rule.rule-redirect.script,
+      auth0_rule.rule-user-metadata.script,
+      auth0_rule.rule-management-api.script,
+      auth0_rule.rule-control-scopes.script,
+      auth0_rule.rule-final.script,
+    ],
+    //wrapper_source = data.local_file.wrapper.content
+    rule_names     = "globals, dump, claims, saml, redirect, metadata, link, scopes"
   })
 }
 
@@ -38,6 +39,7 @@ resource "auth0_client_grant" "companion-m2m-grants" {
   scopes    = ["read:users", "update:users"]
 }
 
+/* can't use global client. missing cc grant */
 data "auth0_client" "companion-m2m" {
   name = auth0_client.companion-m2m.name
   client_id = auth0_client.companion-m2m.client_id
@@ -60,7 +62,7 @@ resource "auth0_action" "wrapper-action" {
 
   dependencies {
     name    = "rules-wrapper"
-    version = "0.1.6"
+    version = "0.1.9"
   }
 
   dependencies {
@@ -70,7 +72,7 @@ resource "auth0_action" "wrapper-action" {
 
   dependencies {
     name    = "auth0"
-    version = "4.2.0"
+    version = "3.5.0"
   }
 
   secrets {

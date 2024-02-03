@@ -40,12 +40,12 @@ const cache = {
 };
 
 describe('simple linking', () => {
-    it('should call setPrimaryUserId if context.primaryUser is set', async () => {
+    it('should call setPrimaryUser() if context.primaryUser is set', async () => {
 
         const event = {};
         const api = {
             authentication: {
-                setPrimaryUserId: _jest.fn()
+                setPrimaryUser: _jest.fn()
             },
             cache
         };
@@ -57,7 +57,7 @@ describe('simple linking', () => {
 
         await wrapper.execute([rule], {event, api});
 
-        expect(api.authentication.setPrimaryUserId).toHaveBeenCalledWith('abc');
+        expect(api.authentication.setPrimaryUser).toHaveBeenCalledWith('abc');
 
     });
 });

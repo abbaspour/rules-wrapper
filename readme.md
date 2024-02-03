@@ -51,3 +51,4 @@ see [mapping.md](mapping.md)
 * https://auth0team.atlassian.net/servicedesk/customer/portal/9/DR-2055?created=true
 * https://auth0team.atlassian.net/servicedesk/customer/portal/34/ESD-33960?created=true
 * https://auth0.com/docs/get-started/architecture-scenarios/spa-api/part-2#create-a-rule-to-validate-token-scopes
+* https://github.com/auth0/auth0-server/blob/master/packages/server/lib/auth/executeRules/executePostLoginTrigger.js
