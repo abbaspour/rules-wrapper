@@ -229,8 +229,8 @@ describe('complex mapping', () => {
                     }
                 }
             },
-            //TODO sessionID: '7wHSq2a_0n83qWJ3R-l1M5_Vu3Bm6cEo',
-            //TODO auth0SessionId: '7wHSq2a_0n83qWJ3R-l1M5_Vu3Bm6cEo',
+            //TODO sessionID: 'xxx-xxx',
+            //TODO auth0SessionId: 'xxx-xxx',
             request: {
                 userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:121.0) Gecko/20100101 Firefox/121.0',
                 ip: '125.168.130.208',
