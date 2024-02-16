@@ -21,8 +21,7 @@ function mapToContext(event) {
         clientMetadata: event?.client?.metadata,
         tenant: event?.tenant?.id,
         protocol: event?.transaction?.protocol,
-        locale: event?.transaction?.locale,
-        // TBC
+        locale: event?.transaction?.locale, // TBC
         jwtConfiguration: {}, // TODO
         // TODO sso: {},
         // placeholder for api
@@ -130,7 +129,10 @@ function diffAndCallApi(event, user, context, auth0, api) {
     }
 
     // -- ID Token --
-    Object.entries(context?.idToken)?.forEach(([key, value]) => api.idToken.setCustomClaim(key, value));
+    Object.entries(context?.idToken)?.forEach(([key, value]) => {
+        console.log(`setting idToken claim ${key} => ${value}`);
+        api.idToken.setCustomClaim(`${key}`, `${value}`);
+    });
 
     // -- Redirection --
     if (context?.redirect?.url) {
@@ -149,12 +151,10 @@ function diffAndCallApi(event, user, context, auth0, api) {
     }
 
     // -- Metadata --
-    for (const r of context.app_metadata_change_record)
-        Object.entries(r).forEach(([name, value]) => api.user.setAppMetadata(name, value));
+    for (const r of context.app_metadata_change_record) Object.entries(r).forEach(([name, value]) => api.user.setAppMetadata(name, value));
 
 
-    for (const r of context.user_metadata_change_record)
-        Object.entries(r).forEach(([name, value]) => api.user.setUserMetadata(name, value));
+    for (const r of context.user_metadata_change_record) Object.entries(r).forEach(([name, value]) => api.user.setUserMetadata(name, value));
 
     // -- SAML --
     // context https://auth0.com/docs/authenticate/protocols/saml/saml-configuration/customize-saml-assertions
@@ -174,8 +174,7 @@ function diffAndCallApi(event, user, context, auth0, api) {
         api.samlResponse.setIssuer(context.samlConfiguration.issuer);
     }
     */
-    if (isNotEmpty(context?.samlConfiguration?.mappings))
-        Object.entries(context.samlConfiguration.mappings)?.forEach(([key, value]) => api.samlResponse.setAttribute(key, user[value]));
+    if (isNotEmpty(context?.samlConfiguration?.mappings)) Object.entries(context.samlConfiguration.mappings)?.forEach(([key, value]) => api.samlResponse.setAttribute(key, user[value]));
 
     if (context.samlConfiguration.createUpnClaim) {
         api.samlResponse.setCreateUpnClaim(context.samlConfiguration.createUpnClaim);
@@ -248,14 +247,13 @@ function wrap(rules) {
     return rules.map((r, i) => (user, context, callback) => {
         try {
             r(user, context, (err, u, c) => {
-                    if (err) {
-                        console.log(`error returned from rule "${r.name}" index ${i}: ${r.name}: ${JSON.stringify(err)}`);
-                        callback(err);
-                    } else {
-                        callback(null, u ? u : user, c ? c : context);
-                    }
+                if (err) {
+                    console.log(`error returned from rule "${r.name}" index ${i}: ${r.name}: ${JSON.stringify(err)}`);
+                    callback(err);
+                } else {
+                    callback(null, u ? u : user, c ? c : context);
                 }
-            );
+            });
         } catch (e) {
             console.log(`uncaught error from rule "${r.name}" index ${i}: ${e}, ${JSON.stringify(e)}`);
             callback(e);
@@ -312,6 +310,28 @@ async function getApi2AccessToken(event, api) {
     return token;
 }
 
+const complex_pkg_name_regex = /^(\@?[^\@]+)\@(.+)$/;
+
+
+function verequire(name) {
+    console.log(`verequire(${name})`);
+    require(name);
+    /*
+    const old_require = global.require;
+    global.require = function (name) {
+        console.log(`running require(${name})`);
+        /!*
+        const match = name.match(complex_pkg_name_regex);
+        if (match) {
+            console.log(`flatting complex package name ${name} to ${match[1]}`);
+            name = match[1];
+        }
+        *!/
+        old_require.apply(this, [name]);
+    };
+    */
+}
+
 exports.execute = async (rules, params) => {
     const {
         event,
@@ -357,20 +377,14 @@ exports.execute = async (rules, params) => {
 
     global.auth0 = auth0;
 
-    async.waterfall([
+    const [result_user, result_context] = await async.waterfall([
         function (callback) {
             callback(null, user, context);
         },
         //...rules
         ...wrap(rules)
-    ], function (err, user, context) {
-        if (err) {
-            console.log(`received error in final callback: ${err}, ${JSON.stringify(err)}`);
-            api.access.deny(err);
-            return;
-        }
+    ]);
 
-        diffAndCallApi(event, user, context, auth0, api);
-    });
+    diffAndCallApi(event, result_user, result_context, auth0, api);
 };
 

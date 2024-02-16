@@ -10,6 +10,7 @@ resource "auth0_rule" "rule-globals" {
 }
 
 // 02
+/*
 data "local_file" "rule-src-dump" {
   filename = "../rules/02-dump.js"
 }
@@ -59,7 +60,7 @@ data "local_file" "rule-src-user-metadata" {
 }
 
 resource "auth0_rule" "rule-user-metadata" {
-  name   = "user-metadata"
+  name   = "metadata"
   script = data.local_file.rule-src-user-metadata.content
   order = 6
 }
@@ -70,7 +71,7 @@ data "local_file" "rule-src-management-api" {
 }
 
 resource "auth0_rule" "rule-management-api" {
-  name   = "management-api"
+  name   = "managementApi"
   script = data.local_file.rule-src-management-api.content
   order = 7
 }
@@ -81,10 +82,11 @@ data "local_file" "rule-src-control-scopes" {
 }
 
 resource "auth0_rule" "rule-control-scopes" {
-  name   = "control-scopes"
+  name   = "controlScopes"
   script = data.local_file.rule-src-control-scopes.content
   order = 8
 }
+*/
 
 // 09 - final
 data "local_file" "rule-src-final" {
@@ -94,5 +96,5 @@ data "local_file" "rule-src-final" {
 resource "auth0_rule" "rule-final" {
   name   = "final"
   script = data.local_file.rule-src-final.content
-  order = 9
+  order = 999
 }

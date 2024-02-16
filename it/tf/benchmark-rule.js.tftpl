@@ -1,0 +1,6 @@
+function (user, context, callback) {
+    console.log(`running rule: ${index}`);
+    global.sleep(1).then( () => {
+        return callback(null, user, context);
+    });
+}

@@ -2,11 +2,18 @@ data "local_file" "wrapper" {
   filename = "../../src/rules-wrapper.js"
 }
 
+locals {
+  benchmark_rules = [for i in range(length(auth0_rule.benchmark-rule)): { (auth0_rule.benchmark-rule[i].name) = auth0_rule.benchmark-rule[i].script }]
+}
+
 resource "local_file" "action-code" {
   filename = "../.rendered/action.js"
   content  = templatefile("../action.tftpl.js", {
+    benchmark_rules = local.benchmark_rules,
     rules = [
-      auth0_rule.rule-globals.script,
+      { (auth0_rule.rule-globals.name) = auth0_rule.rule-globals.script },
+      { (auth0_rule.rule-final.name) =  auth0_rule.rule-final.script }
+      /*
       auth0_rule.rule-dump.script,
       auth0_rule.rule-claims.script,
       auth0_rule.rule-saml.script,
@@ -15,9 +22,9 @@ resource "local_file" "action-code" {
       auth0_rule.rule-management-api.script,
       auth0_rule.rule-control-scopes.script,
       auth0_rule.rule-final.script,
+      */
     ],
-    //wrapper_source = data.local_file.wrapper.content
-    rule_names     = "globals, dump, claims, saml, redirect, metadata, link, scopes"
+    wrapper_source = data.local_file.wrapper.content
   })
 }
 
@@ -98,4 +105,21 @@ resource "auth0_action" "wrapper-action" {
 
 output "global_client_id" {
   value = data.auth0_client.global_client.client_id
+}
+
+## fs
+data "local_file" "fs-action-src" {
+  filename = "./fs-action.js"
+}
+
+resource "auth0_action" "fs-action" {
+  name    = "FS Action"
+  runtime = "node18"
+  deploy  = true
+  code    = data.local_file.fs-action-src.content
+
+  supported_triggers {
+    id      = "post-login"
+    version = "v3"
+  }
 }
