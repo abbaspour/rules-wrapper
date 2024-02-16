@@ -129,10 +129,7 @@ function diffAndCallApi(event, user, context, auth0, api) {
     }
 
     // -- ID Token --
-    Object.entries(context?.idToken)?.forEach(([key, value]) => {
-        console.log(`setting idToken claim ${key} => ${value}`);
-        api.idToken.setCustomClaim(`${key}`, `${value}`);
-    });
+    Object.entries(context?.idToken)?.forEach(([key, value]) => api.idToken.setCustomClaim(key, value) );
 
     // -- Redirection --
     if (context?.redirect?.url) {
