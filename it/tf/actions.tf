@@ -107,19 +107,3 @@ output "global_client_id" {
   value = data.auth0_client.global_client.client_id
 }
 
-## fs
-data "local_file" "fs-action-src" {
-  filename = "./fs-action.js"
-}
-
-resource "auth0_action" "fs-action" {
-  name    = "FS Action"
-  runtime = "node18"
-  deploy  = true
-  code    = data.local_file.fs-action-src.content
-
-  supported_triggers {
-    id      = "post-login"
-    version = "v3"
-  }
-}

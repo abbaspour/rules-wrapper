@@ -1,5 +1,22 @@
-/* eslint-disable */
-const async = require('async');
+// rules-wrapper starts here
+const original_require = require;
+
+const complex_pkg_name_regex = /^(\@?[^\@]+)\@(.+)$/;
+
+function verequire(name) {
+    console.log(`verequire(${name})`);
+    const match = name.match(complex_pkg_name_regex);
+    if (match) {
+        //console.log(`flatting complex package name ${name} to ${match[1]}`);
+        name = match[1];
+    }
+    return original_require(name);
+}
+
+// eslint-disable-next-line no-global-assign
+require = verequire;
+
+const async = original_require('async');
 
 const isNotEmpty = (o) => o && Object.keys(o).length > 0;
 
@@ -265,7 +282,7 @@ async function getApi2AccessToken(event, api) {
     let {value: token} = api.cache.get(API2_CACHE_KEY) || {};
 
     if (!token) {
-        const {AuthenticationClient} = require('auth0');
+        const {AuthenticationClient} = require('auth0@3.5.0');
 
         const {
             domain,
@@ -305,28 +322,6 @@ async function getApi2AccessToken(event, api) {
     }
 
     return token;
-}
-
-const complex_pkg_name_regex = /^(\@?[^\@]+)\@(.+)$/;
-
-
-function verequire(name) {
-    console.log(`verequire(${name})`);
-    require(name);
-    /*
-    const old_require = global.require;
-    global.require = function (name) {
-        console.log(`running require(${name})`);
-        /!*
-        const match = name.match(complex_pkg_name_regex);
-        if (match) {
-            console.log(`flatting complex package name ${name} to ${match[1]}`);
-            name = match[1];
-        }
-        *!/
-        old_require.apply(this, [name]);
-    };
-    */
 }
 
 exports.execute = async (rules, params) => {
@@ -384,4 +379,4 @@ exports.execute = async (rules, params) => {
 
     diffAndCallApi(event, result_user, result_context, auth0, api);
 };
-
+// rules wrapper ends here

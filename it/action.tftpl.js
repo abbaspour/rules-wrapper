@@ -38,6 +38,7 @@ exports.onExecutePostLogin = async (event, api) => {
         ], {event, api});
     } catch (e) {
         console.log(`error from onExecutePostLogin wrapper execution: $${JSON.stringify(e)}`);
+        throw e;
     }
 };
 
@@ -63,5 +64,6 @@ exports.onContinuePostLogin = async (event, api) => {
         ], {event, api, onContinue: true});
     } catch (e) {
         console.log(`error from onContinuePostLogin wrapper execution: $${JSON.stringify(e)}`);
+        throw e;
     }
 };
