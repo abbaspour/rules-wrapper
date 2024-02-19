@@ -1,3 +1,4 @@
+/*
 // rules-wrapper starts here
 const original_require = require;
 
@@ -15,8 +16,9 @@ function verequire(name) {
 
 // eslint-disable-next-line no-global-assign
 require = verequire;
+*/
 
-const async = original_require('async');
+const async = require('async');
 
 const isNotEmpty = (o) => o && Object.keys(o).length > 0;
 
@@ -146,7 +148,7 @@ function diffAndCallApi(event, user, context, auth0, api) {
     }
 
     // -- ID Token --
-    Object.entries(context?.idToken)?.forEach(([key, value]) => api.idToken.setCustomClaim(key, value) );
+    Object.entries(context?.idToken)?.forEach(([key, value]) => api.idToken.setCustomClaim(key, value));
 
     // -- Redirection --
     if (context?.redirect?.url) {
@@ -263,14 +265,14 @@ function wrap(rules) {
             r(user, context, (err, u, c) => {
                 if (err) {
                     console.log(`error returned from rule "${r.name}" index ${i}: ${r.name}: ${JSON.stringify(err)}`);
-                    callback(err);
+                    throw err;
                 } else {
                     callback(null, u ? u : user, c ? c : context);
                 }
             });
         } catch (e) {
             console.log(`uncaught error from rule "${r.name}" index ${i}: ${e}, ${JSON.stringify(e)}`);
-            callback(e);
+            throw e;
         }
     });
 }
@@ -282,7 +284,7 @@ async function getApi2AccessToken(event, api) {
     let {value: token} = api.cache.get(API2_CACHE_KEY) || {};
 
     if (!token) {
-        const {AuthenticationClient} = require('auth0@3.5.0');
+        const {AuthenticationClient} = require('auth0');
 
         const {
             domain,
@@ -369,14 +371,18 @@ exports.execute = async (rules, params) => {
 
     global.auth0 = auth0;
 
-    const [result_user, result_context] = await async.waterfall([
-        function (callback) {
-            callback(null, user, context);
-        },
-        //...rules
-        ...wrap(rules)
-    ]);
-
-    diffAndCallApi(event, result_user, result_context, auth0, api);
+    try {
+        const [result_user, result_context] = await async.waterfall([
+            function (callback) {
+                callback(null, user, context);
+            },
+            //...rules
+            ...wrap(rules)
+        ]);
+        diffAndCallApi(event, result_user, result_context, auth0, api);
+    } catch (e) {
+        console.log(`rules waterfall exec resulted in exception: ${JSON.stringify(e)}`);
+        api.access.deny(e);
+    }
 };
 // rules wrapper ends here

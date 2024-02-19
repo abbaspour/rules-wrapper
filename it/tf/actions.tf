@@ -8,7 +8,7 @@ locals {
 
 resource "local_file" "action-code" {
   filename = "../.rendered/action.js"
-  content  = templatefile("../action.tftpl.js", {
+  content  = templatefile("../actions/wrapper-action.tftpl.js", {
     benchmark_rules = local.benchmark_rules,
     rules = [
       { (auth0_rule.rule-globals.name) = auth0_rule.rule-globals.script },

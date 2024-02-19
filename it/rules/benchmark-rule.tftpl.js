@@ -1,6 +1,7 @@
+// noinspection JSUnusedGlobalSymbols,ReservedWordAsName
 function (user, context, callback) {
     console.log(`running rule: ${index}`);
-    global.sleep(1).then( () => {
+    setTimeout(() => {
         return callback(null, user, context);
-    });
+    }, 1);
 }

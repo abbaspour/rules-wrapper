@@ -36,3 +36,9 @@ variable "rule_count" {
   description = "number of rules for performance testing"
   default = 1
 }
+
+variable "action_count" {
+  type = number
+  description = "number of actions for performance testing"
+  default = 1
+}

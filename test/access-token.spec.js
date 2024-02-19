@@ -13,10 +13,8 @@ const AuthenticationClient = _jest.fn().mockImplementation((domain, clientId, cl
         oauth: {
             clientCredentialsGrant: _jest.fn().mockImplementation((audience) => {
                 return {
-                    data: {
-                        access_token: `mock-access-token => domain: ${domain}, clientId: ${clientId}, clientSecret: ${clientSecret ? clientSecret.replace(/./g, 'x') : 'xxx'}, audience: ${audience}`,
-                        expires_in: 86400
-                    }
+                    access_token: `mock-access-token => domain: ${domain}, clientId: ${clientId}, clientSecret: ${clientSecret ? clientSecret.replace(/./g, 'x') : 'xxx'}, audience: ${audience}`,
+                    expires_in: 86400
                 };
             })
         }
@@ -38,11 +36,10 @@ const cache = {
     set: _jest.fn()
 };
 
-describe('handle custom claims',  () => {
+describe('handle custom claims', () => {
     it('should call setCustomClaim for all custom claims', async () => {
 
-        const event = {
-        };
+        const event = {};
         const api = {
             accessToken: {
                 setCustomClaim: _jest.fn()
