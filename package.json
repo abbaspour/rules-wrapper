@@ -1,6 +1,6 @@
 {
   "name": "rules-wrapper",
-  "version": "0.1.9",
+  "version": "0.1.11",
   "description": "Auth0 rules-wrapper to allow calling Rules inside Actions",
   "main": "src/rules-wrapper.js",
   "scripts": {
@@ -10,6 +10,9 @@
   "keywords": [],
   "author": "Amin Abbaspour <amin@okta.com>",
   "license": "ISC",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "dependencies": {
     "async": "^3.2.5",
     "auth0": "3.5.0"

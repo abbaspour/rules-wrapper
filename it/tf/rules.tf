@@ -7,6 +7,7 @@ resource "auth0_rule" "rule-globals" {
   name   = "globals"
   script = data.local_file.rule-src-globals.content
   order = 1
+  enabled = false
 }
 
 // 02
@@ -18,6 +19,7 @@ resource "auth0_rule" "rule-dump" {
   name   = "dump"
   script = data.local_file.rule-src-dump.content
   order = 2
+  enabled = false
 }
 
 // 03
@@ -29,6 +31,7 @@ resource "auth0_rule" "rule-claims" {
   name   = "claims"
   script = data.local_file.rule-src-claims.content
   order = 3
+  enabled = false
 }
 
 // 04
@@ -40,6 +43,7 @@ resource "auth0_rule" "rule-saml" {
   name   = "saml"
   script = data.local_file.rule-src-saml.content
   order = 4
+  enabled = false
 }
 
 // 05 - redirect
@@ -51,6 +55,7 @@ resource "auth0_rule" "rule-redirect" {
   name   = "redirect"
   script = data.local_file.rule-src-redirect.content
   order = 5
+  enabled = false
 }
 
 // 06 - user metadata
@@ -59,9 +64,10 @@ data "local_file" "rule-src-user-metadata" {
 }
 
 resource "auth0_rule" "rule-user-metadata" {
-  name   = "user-metadata"
+  name   = "metadata"
   script = data.local_file.rule-src-user-metadata.content
   order = 6
+  enabled = false
 }
 
 // 07 - management-api
@@ -70,9 +76,10 @@ data "local_file" "rule-src-management-api" {
 }
 
 resource "auth0_rule" "rule-management-api" {
-  name   = "management-api"
+  name   = "managementApi"
   script = data.local_file.rule-src-management-api.content
   order = 7
+  enabled = false
 }
 
 // 08 - access_token scopes
@@ -81,9 +88,10 @@ data "local_file" "rule-src-control-scopes" {
 }
 
 resource "auth0_rule" "rule-control-scopes" {
-  name   = "control-scopes"
+  name   = "controlScopes"
   script = data.local_file.rule-src-control-scopes.content
   order = 8
+  enabled = false
 }
 
 // 09 - final
@@ -94,5 +102,6 @@ data "local_file" "rule-src-final" {
 resource "auth0_rule" "rule-final" {
   name   = "final"
   script = data.local_file.rule-src-final.content
-  order = 9
+  order = 999
+  enabled = false
 }

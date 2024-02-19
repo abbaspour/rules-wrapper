@@ -13,6 +13,10 @@ function globals(user, context, callback) {
         console.log(`${new Date().toISOString()} id: ${context.rules_exec_id} ERROR ${msg}`);
     };
 
+    global.sleep = global.sleep || function (ms) {
+        return new Promise(r => setTimeout(r, ms));
+    };
+
     global.info(`starting exec ${context.rules_exec_id} with protocol ${context.protocol}`);
 
     return callback(null, user, context);

@@ -13,10 +13,8 @@ const AuthenticationClient = _jest.fn().mockImplementation((domain, clientId, cl
         oauth: {
             clientCredentialsGrant: _jest.fn().mockImplementation((audience) => {
                 return {
-                    data: {
-                        access_token: `mock-access-token => domain: ${domain}, clientId: ${clientId}, clientSecret: ${clientSecret ? clientSecret.replace(/./g, 'x') : 'xxx'}, audience: ${audience}`,
-                        expires_in: 86400
-                    }
+                    access_token: `mock-access-token => domain: ${domain}, clientId: ${clientId}, clientSecret: ${clientSecret ? clientSecret.replace(/./g, 'x') : 'xxx'}, audience: ${audience}`,
+                    expires_in: 86400
                 };
             })
         }
@@ -56,9 +54,13 @@ describe('support auth0 embedded object', () => {
             expect(auth0.accessToken).not.toBeNull();
             expect(auth0.baseUrl).toBe('https://my-auth0-domain.auth0.com/api/v2');
             expect(auth0.domain).toBe('my-auth0-domain.auth0.com');
+            return cb(null, u, ctx);
         }
 
-        await wrapper.execute([rule], {event, api});
+        await wrapper.execute([rule], {
+            event,
+            api
+        });
 
     });
 

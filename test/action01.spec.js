@@ -1,6 +1,8 @@
 // noinspection DuplicatedCode
 
-const {describe, it,
+const {
+    describe,
+    it,
     beforeEach
 } = require('@jest/globals');
 const {jest: _jest} = require('@jest/globals');
@@ -10,10 +12,8 @@ const AuthenticationClient = _jest.fn().mockImplementation((domain, clientId, cl
         oauth: {
             clientCredentialsGrant: _jest.fn().mockImplementation((audience) => {
                 return {
-                    data: {
-                        access_token: `mock-access-token => domain: ${domain}, clientId: ${clientId}, clientSecret: ${clientSecret ? clientSecret.replace(/./g, 'x') : 'xxx'}, audience: ${audience}`,
-                        expires_in: 86400
-                    }
+                    access_token: `mock-access-token => domain: ${domain}, clientId: ${clientId}, clientSecret: ${clientSecret ? clientSecret.replace(/./g, 'x') : 'xxx'}, audience: ${audience}`,
+                    expires_in: 86400
                 };
             })
         }

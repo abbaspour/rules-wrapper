@@ -13,10 +13,8 @@ const AuthenticationClient = _jest.fn().mockImplementation((domain, clientId, cl
         oauth: {
             clientCredentialsGrant: _jest.fn().mockImplementation((audience) => {
                 return {
-                    data: {
-                        access_token: `mock-access-token => domain: ${domain}, clientId: ${clientId}, clientSecret: ${clientSecret ? clientSecret.replace(/./g, 'x') : 'xxx'}, audience: ${audience}`,
-                        expires_in: 86400
-                    }
+                    access_token: `mock-access-token => domain: ${domain}, clientId: ${clientId}, clientSecret: ${clientSecret ? clientSecret.replace(/./g, 'x') : 'xxx'}, audience: ${audience}`,
+                    expires_in: 86400
                 };
             })
         }
@@ -55,7 +53,10 @@ describe('handle custom claims', () => {
             callback(null);
         }
 
-        await wrapper.execute([rule], {event, api});
+        await wrapper.execute([rule], {
+            event,
+            api
+        });
 
         expect(api.idToken.setCustomClaim).toHaveBeenCalledTimes(2);
         expect(api.idToken.setCustomClaim).toHaveBeenNthCalledWith(1, 'k1', 'v1');

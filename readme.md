@@ -37,7 +37,6 @@ see [mapping.md](mapping.md)
 
 # Not supported
 * [ ] SAML mapping for [issuer, logout and binding](https://auth0team.atlassian.net/servicedesk/customer/portal/34/ESD-33960) 
-* [ ] Complex module names dependencies (Rules [verequire()](https://github.com/auth0/verquire/blob/master/lib/verquire.js#L14-L44)) vs actions dependencies
 * [ ] context fields `sessionID`, `auth0SessionId`, `sso` and `jwtConfiguration`
 * [ ] [upstream IdP access_token](https://auth0.com/docs/customize/actions/limitations) 
 
@@ -46,9 +45,3 @@ see [mapping.md](mapping.md)
 
 # Todo
 * [ ] log level param
-
-# References
-* https://auth0team.atlassian.net/servicedesk/customer/portal/9/DR-2055?created=true
-* https://auth0team.atlassian.net/servicedesk/customer/portal/34/ESD-33960?created=true
-* https://auth0.com/docs/get-started/architecture-scenarios/spa-api/part-2#create-a-rule-to-validate-token-scopes
-* https://github.com/auth0/auth0-server/blob/master/packages/server/lib/auth/executeRules/executePostLoginTrigger.js

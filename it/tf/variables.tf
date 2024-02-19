@@ -30,3 +30,15 @@ variable "social_user_email" {
   type = string
   description = "email for social users"
 }
+
+variable "rule_count" {
+  type = number
+  description = "number of rules for performance testing"
+  default = 1
+}
+
+variable "action_count" {
+  type = number
+  description = "number of actions for performance testing"
+  default = 1
+}

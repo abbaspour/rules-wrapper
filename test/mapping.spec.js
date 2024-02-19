@@ -13,10 +13,8 @@ const AuthenticationClient = _jest.fn().mockImplementation((domain, clientId, cl
         oauth: {
             clientCredentialsGrant: _jest.fn().mockImplementation((audience) => {
                 return {
-                    data: {
-                        access_token: `mock-access-token => domain: ${domain}, clientId: ${clientId}, clientSecret: ${clientSecret ? clientSecret.replace(/./g, 'x') : 'xxx'}, audience: ${audience}`,
-                        expires_in: 86400
-                    }
+                    access_token: `mock-access-token => domain: ${domain}, clientId: ${clientId}, clientSecret: ${clientSecret ? clientSecret.replace(/./g, 'x') : 'xxx'}, audience: ${audience}`,
+                    expires_in: 86400
                 };
             })
         }
@@ -263,15 +261,17 @@ describe('complex mapping', () => {
             user_metadata_change_record: []
         };
 
-        const mockRule = _jest.fn();
+        const mockRule = function (user, context, cb) {
+            expect(user).toEqual(expectedUser);
+            expect(context).toEqual(expectedContext);
+            return cb(null, user, context);
+        }
 
         await wrapper.execute([mockRule], {
             event: mockEvent,
             api: {cache}
         });
 
-        expect(mockRule).toHaveBeenCalledTimes(1);
-        expect(mockRule).toHaveBeenCalledWith(expectedUser, expectedContext, expect.anything());
     });
 
 });

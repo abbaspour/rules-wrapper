@@ -3,6 +3,8 @@ async function link(user, context, callback) {
     const info = global.info;
     const error = global.err;
 
+    const {ManagementClient} = require('auth0@3.5.0');
+
     if (user.identities.length > 1) { // no linking if user is already linked
         info('user already linked. skip linking.');
         return callback(null, user, context);
@@ -12,8 +14,6 @@ async function link(user, context, callback) {
         info('user is not social. skip linking.');
         return callback(null, user, context);
     }
-
-    const {ManagementClient} = require('auth0');
 
     const client = new ManagementClient({
         token: auth0.accessToken,
