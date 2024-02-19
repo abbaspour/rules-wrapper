@@ -3,7 +3,7 @@ async function link(user, context, callback) {
     const info = global.info;
     const error = global.err;
 
-    const {ManagementClient} = require('auth0');
+    const {ManagementClient} = require('auth0@3.5.0');
 
     if (user.identities.length > 1) { // no linking if user is already linked
         info('user already linked. skip linking.');

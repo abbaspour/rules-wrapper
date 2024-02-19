@@ -31,6 +31,7 @@ resource "auth0_action" "benchmark-action" {
   }
 }
 
+/*
 resource "auth0_trigger_actions" "benchmark-binding" {
   trigger = "post-login"
   depends_on = [auth0_action.benchmark-action]
@@ -52,5 +53,5 @@ resource "auth0_trigger_actions" "benchmark-binding" {
     display_name = "end"
     id           = auth0_action.benchmark-end.id
   }
-
 }
+*/

@@ -1,3 +1,5 @@
+const async = require('async');
+
 /*
 // rules-wrapper starts here
 const original_require = require;
@@ -16,10 +18,8 @@ function verequire(name) {
 
 // eslint-disable-next-line no-global-assign
 require = verequire;
+
 */
-
-const async = require('async');
-
 const isNotEmpty = (o) => o && Object.keys(o).length > 0;
 
 function mapToContext(event) {

@@ -2,27 +2,26 @@ data "local_file" "wrapper" {
   filename = "../../src/rules-wrapper.js"
 }
 
+/*
 locals {
   benchmark_rules = [for i in range(length(auth0_rule.benchmark-rule)): { (auth0_rule.benchmark-rule[i].name) = auth0_rule.benchmark-rule[i].script }]
 }
+*/
 
 resource "local_file" "action-code" {
   filename = "../.rendered/action.js"
   content  = templatefile("../actions/wrapper-action.tftpl.js", {
-    benchmark_rules = local.benchmark_rules,
+    //benchmark_rules = local.benchmark_rules,
     rules = [
       { (auth0_rule.rule-globals.name) = auth0_rule.rule-globals.script },
+      { (auth0_rule.rule-dump.name) = auth0_rule.rule-dump.script },
+      { (auth0_rule.rule-claims.name) = auth0_rule.rule-claims.script },
+      { (auth0_rule.rule-saml.name) = auth0_rule.rule-saml.script },
+      { (auth0_rule.rule-redirect.name) = auth0_rule.rule-redirect.script },
+      { (auth0_rule.rule-user-metadata.name) = auth0_rule.rule-user-metadata.script },
+      { (auth0_rule.rule-management-api.name) = auth0_rule.rule-management-api.script },
+      { (auth0_rule.rule-control-scopes.name) = auth0_rule.rule-control-scopes.script },
       { (auth0_rule.rule-final.name) =  auth0_rule.rule-final.script }
-      /*
-      auth0_rule.rule-dump.script,
-      auth0_rule.rule-claims.script,
-      auth0_rule.rule-saml.script,
-      auth0_rule.rule-redirect.script,
-      auth0_rule.rule-user-metadata.script,
-      auth0_rule.rule-management-api.script,
-      auth0_rule.rule-control-scopes.script,
-      auth0_rule.rule-final.script,
-      */
     ],
     wrapper_source = data.local_file.wrapper.content
   })
@@ -69,7 +68,7 @@ resource "auth0_action" "wrapper-action" {
 
   dependencies {
     name    = "rules-wrapper"
-    version = "0.1.9"
+    version = "0.1.11"
   }
 
   dependencies {

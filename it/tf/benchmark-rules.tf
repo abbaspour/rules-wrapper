@@ -1,3 +1,4 @@
+/*
 resource "auth0_rule" "benchmark-rule" {
   count = var.rule_count
   name   = "rule${count.index + 2}"
@@ -7,4 +8,4 @@ resource "auth0_rule" "benchmark-rule" {
   })
   order = count.index + 2
 }
-
+*/
