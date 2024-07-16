@@ -265,6 +265,14 @@ function diffAndCallApi(event, user, context, auth0, api) {
         api.samlResponse.setEncryptionCert(context.samlConfiguration.encryptionCert);
     }
 
+    if (context.samlConfiguration.cert) {
+        api.samlResponse.setCert(context.samlConfiguration.cert);
+    }
+
+    if (context.samlConfiguration.key) {
+        api.samlResponse.setKey(context.samlConfiguration.key);
+    }
+
 }
 
 function wrap(rules) {
