@@ -257,6 +257,14 @@ function diffAndCallApi(event, user, context, auth0, api) {
         api.samlResponse.setSigningCert(context.samlConfiguration.signingCert);
     }
 
+    if (context.samlConfiguration.encryptionPublicKey) {
+        api.samlResponse.setEncryptionPublicKey(context.samlConfiguration.encryptionPublicKey);
+    }
+
+    if (context.samlConfiguration.encryptionCert) {
+        api.samlResponse.setEncryptionCert(context.samlConfiguration.encryptionCert);
+    }
+
 }
 
 function wrap(rules) {

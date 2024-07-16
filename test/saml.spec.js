@@ -39,6 +39,8 @@ const cache = {
 describe('handle custom claims', () => {
 
     const testSigningCert = '-----BEGIN CERTIFICATE-----\nMIIC8jCCAdqgAwIBAgIJObB6jmhG0QIEMA0GCSqGSIb3DQEBBQUAMCAxHjAcBgNV\n[..all the other lines..]-----END CERTIFICATE-----\n';
+    const testEncryptionPublicKey = '-----BEGIN PUBLIC KEY-----\nnMIIC8jCCAdqgAwIBAgIJObB6jmhG0QIEMA0GCSqGSIb3DQEBBQUAMCAxHjAcBgNV\n[..all the other lines..]-----END PUBLIC KEY-----\n';
+    const testEncryptionCert = '-----BEGIN CERTIFICATE-----\nnnMIIC8jCCAdqgAwIBAgIJObB6jmhG0QIEMA0GCSqGSIb3DQEBBQUAMCAxHjAcBgNV\n[..all the other lines..]-----END CERTIFICATE-----\n';
 
     it('should call setCustomClaim for all custom claims', async () => {
 
@@ -66,6 +68,8 @@ describe('handle custom claims', () => {
                 setTypedAttributes: _jest.fn(),
                 setLifetimeInSeconds: _jest.fn(),
                 setSigningCert: _jest.fn(),
+                setEncryptionPublicKey: _jest.fn(),
+                setEncryptionCert: _jest.fn(),
                 setAttribute: _jest.fn(),
             },
             cache
@@ -89,6 +93,8 @@ describe('handle custom claims', () => {
             context.samlConfiguration.typedAttributes = true;
             context.samlConfiguration.lifetimeInSeconds = 3600;
             context.samlConfiguration.signingCert = testSigningCert;
+            context.samlConfiguration.encryptionPublicKey = testEncryptionPublicKey;
+            context.samlConfiguration.encryptionCert = testEncryptionCert;
             context.samlConfiguration.mappings = {
                 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/PPID': 'user_id'
             };
@@ -117,6 +123,8 @@ describe('handle custom claims', () => {
         expect(api.samlResponse.setTypedAttributes).toHaveBeenCalledWith(true);
         expect(api.samlResponse.setLifetimeInSeconds).toHaveBeenCalledWith(3600);
         expect(api.samlResponse.setSigningCert).toHaveBeenCalledWith(testSigningCert);
+        expect(api.samlResponse.setEncryptionPublicKey).toHaveBeenCalledWith(testEncryptionPublicKey);
+        expect(api.samlResponse.setEncryptionCert).toHaveBeenCalledWith(testEncryptionCert);
         expect(api.samlResponse.setAttribute).toHaveBeenCalledWith('http://schemas.xmlsoap.org/ws/2005/05/identity/claims/PPID', 'u123');
 
     });

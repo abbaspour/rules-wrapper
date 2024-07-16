@@ -24,6 +24,7 @@
 | ???                              | `.sso`                |
 | ???                              | `.sessionID`          |
 | ???                              | `.auth0SessionId`     |
+| ???                              | `.connectionOptions`  |
 
 ## Methods
 
@@ -62,9 +63,16 @@ and
 | `.typedAttributes`                | boolean | `.setTypedAttributes()`                | 
 | `.includeAttributeNameFormat`     | boolean | `.setIncludeAttributeNameFormat()`     | 
 | `.signingCert`                    | string  | `.setSigningCert()`                    |  
+| `.encryptionPublicKey`            | string  | `.setEncryptionPublicKey()`            |  
+| `.encryptionCert`                 | string  | `.setEncryptionCert()`                 |  
+| `.key`                            | string  | `.setKey()`                            |  
+| `.cert`                           | string  | `.setCert()`                           |  
 | `.issuer`                         | string  | ???                                    | 
 | `.logout`                         | object  | ???                                    | 
 | `.binding`                        | string  | ???                                    | 
+| `.RelayState`                     | string  | ???                                    |
+| `.authnContextDeclRef`            | string  | ???                                    | 
+| `.wctx`                           | string  | ???                                    | 
 
 # User Mapping
 
