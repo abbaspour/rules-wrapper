@@ -87,10 +87,10 @@ and
 
 ## Methods
 
-| Action `api`              | Rules `auth0.users` |
-|:--------------------------|:--------------------|
-| `.user.setAppMetadata()`  | `.app_metadata`     |
-| `.user.setUserMetadata()` | `.user_metadata`    |
+| Action `api`              | Rules `auth0.users`     |
+|:--------------------------|:------------------------|
+| `.user.setAppMetadata()`  | `.updateAppMetadata()`  |
+| `.user.setUserMetadata()` | `.updateUserMetadata()` |
 
 # Rules `auth0` Object
 
@@ -100,3 +100,21 @@ and
 | ?       | `.users`       |
 | ?       | `.accessToken` |
 | ?       | `.domain`      |
+
+Auth0 accessToken has following scopes
+
+* `read:users`
+* `update:users`
+
+Here is a sample token:
+
+```json
+{
+  "iss": "https://abbaspour.auth0.com/",
+  "aud": "https://abbaspour.auth0.com/api/v2/",
+  "iat": 1726545425,
+  "exp": 1726550825,
+  "scope": "read:users update:users",
+  "azp": "indMoL7Aya109w09tV5Ei4gdTf1DmKL1"
+}
+```
