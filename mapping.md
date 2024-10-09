@@ -2,33 +2,33 @@
 
 ## Attributes
 
-| Action `event`                   | Rules `context`                       |
-|:---------------------------------|:--------------------------------------|
-| `.authentication.riskAssessment` | `.riskAssessment`                     |
-| `.request`                       | `.request`                            |
-| `.authorization`                 | `.authorization`                      |
-| `.authentication`                | `.authentication`                     |
-| `.stats`                         | `.stats`                              |
-| `.connection.id`                 | `.connectionID`                       |
-| `.connection.metadata`           | `.connectionMetadata`                 |
-| `.connection.name`               | `.connection`                         |
-| `.connection.strategy`           | `.connectionStrategy`                 |
-| `.client.client_id`              | `.clientID`                           |
-| `.client.name`                   | `.clientName`                         |
-| `.client.metadata`               | `.clientMetadata`                     |
-| `.tenant.id`                     | `.tenant`                             |
-| `.transaction.protocol`          | `.protocol`                           |           
-| `.transaction.locale`            | `.locale`                             |
-| `.secrets`                       | `.configuration`                      |
-| `.session.clients`               | `.sso.current_clients`                |
-| `.session.id`                    | `.sessionID`                          |
-| `.session.id`                    | `.auth0SessionId`                     |
-| ???                              | `.connectionOptions.domain_aliases`   |
-| ???                              | `.connectionOptions.tenant_domain`    |
-| ???                              | `.jwtConfiguration.scopes`            |
-| ???                              | `.jwtConfiguration.lifetimeInSeconds` |
-| ???                              | `.sso.with_dbconn`                    |
-| ???                              | `.sso.with_auth0`                     |
+| Rules `context`                       | Action `event`                                        | 
+|:--------------------------------------|:------------------------------------------------------|
+| `.riskAssessment`                     | `.authentication.riskAssessment`                      | 
+| `.request`                            | `.request`                                            | 
+| `.authorization`                      | `.authorization`                                      | 
+| `.authentication`                     | `.authentication`                                     | 
+| `.stats`                              | `.stats`                                              | 
+| `.connectionID`                       | `.connection.id`                                      | 
+| `.connectionMetadata`                 | `.connection.metadata`                                | 
+| `.connection`                         | `.connection.name`                                    | 
+| `.connectionStrategy`                 | `.connection.strategy`                                | 
+| `.clientID`                           | `.client.client_id`                                   | 
+| `.clientName`                         | `.client.name`                                        | 
+| `.clientMetadata`                     | `.client.metadata`                                    | 
+| `.tenant`                             | `.tenant.id`                                          | 
+| `.protocol`                           | `.transaction.protocol`                               |            
+| `.locale`                             | `.transaction.locale`                                 | 
+| `.configuration`                      | `.secrets`                                            | 
+| `.sso.current_clients`                | `.session.clients`                                    | 
+| `.sessionID`                          | `.session.id`                                         | 
+| `.auth0SessionId`                     | `.session.id`                                         | 
+| `.connectionOptions.domain_aliases`   | ???                                                   | 
+| `.connectionOptions.tenant_domain`    | ???                                                   | 
+| `.jwtConfiguration.scopes`            | ???                                                   | 
+| `.jwtConfiguration.lifetimeInSeconds` | ???                                                   | 
+| `.sso.with_dbconn`                    | `.authentication.methods.some(m => m.name === 'pwd')` | 
+| `.sso.with_auth0`                     | deprecated                                            | 
 
 ## Methods
 
@@ -71,24 +71,24 @@ and
 | `.encryptionCert`                 | string  | `.setEncryptionCert()`                 |  
 | `.key`                            | string  | `.setKey()`                            |  
 | `.cert`                           | string  | `.setCert()`                           |  
+| `.authnContextDeclRef`            | string  | deprecated                             | 
 | `.issuer`                         | string  | ???                                    | 
-| `.logout`                         | object  | ???                                    | 
+| `.logout {callback, slo_enabled}` | object  | ???                                    | 
 | `.binding`                        | string  | ???                                    | 
 | `.RelayState`                     | string  | ???                                    |
-| `.authnContextDeclRef`            | string  | ???                                    | 
 | `.wctx`                           | string  | ???                                    | 
 
 # User Mapping
 
 ## Attributes
 
-| Rules `user`                 | Action `event`           |         
-|:-----------------------------|:-------------------------|
-| `.`                          | `.user`                  
-| `.clientID`                  | `.client.clent_id`       | 
-| `.global_client_id`          | Secrets.global_client_id | 
-| `.identities[]`              | `.user.identities`       | 
-| `.identities[].access_token` | ???                      | 
+| Rules `user`                 | Action `event`                               |         
+|:-----------------------------|:---------------------------------------------|
+| `.`                          | `.user`                                      |                     
+| `.clientID`                  | `.client.clent_id`                           | 
+| `.global_client_id`          | deprecated (use `.secrets.global_client_id`) | 
+| `.identities[]`              | `.user.identities`                           | 
+| `.identities[].access_token` | deprecated (TBA via add-on)                  | 
 
 ## Methods
 
@@ -100,6 +100,8 @@ This is rough mapping since `auth0.users` can operate on all users but `api.user
 | `.updateUserMetadata()` | `.setUserMetadata()` | 
 
 # Rules `auth0` Object
+
+deprecated (TBA via add-on)
 
 | Rules `auth0`  | Actions | 
 |:---------------|:--------|
