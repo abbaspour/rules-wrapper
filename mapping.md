@@ -2,33 +2,33 @@
 
 ## Attributes
 
-| Rules `context`                       | Action `event`                                        | 
-|:--------------------------------------|:------------------------------------------------------|
-| `.riskAssessment`                     | `.authentication.riskAssessment`                      | 
-| `.request`                            | `.request`                                            | 
-| `.authorization`                      | `.authorization`                                      | 
-| `.authentication`                     | `.authentication`                                     | 
-| `.stats`                              | `.stats`                                              | 
-| `.connectionID`                       | `.connection.id`                                      | 
-| `.connectionMetadata`                 | `.connection.metadata`                                | 
-| `.connection`                         | `.connection.name`                                    | 
-| `.connectionStrategy`                 | `.connection.strategy`                                | 
-| `.clientID`                           | `.client.client_id`                                   | 
-| `.clientName`                         | `.client.name`                                        | 
-| `.clientMetadata`                     | `.client.metadata`                                    | 
-| `.tenant`                             | `.tenant.id`                                          | 
-| `.protocol`                           | `.transaction.protocol`                               |            
-| `.locale`                             | `.transaction.locale`                                 | 
-| `.configuration`                      | `.secrets`                                            | 
-| `.sso.current_clients`                | `.session.clients`                                    | 
-| `.sessionID`                          | `.session.id`                                         | 
-| `.auth0SessionId`                     | `.session.id`                                         | 
-| `.connectionOptions.domain_aliases`   | ???                                                   | 
-| `.connectionOptions.tenant_domain`    | ???                                                   | 
-| `.jwtConfiguration.scopes`            | ???                                                   | 
-| `.jwtConfiguration.lifetimeInSeconds` | ???                                                   | 
-| `.sso.with_dbconn`                    | `.authentication.methods.some(m => m.name === 'pwd')` | 
-| `.sso.with_auth0`                     | deprecated                                            | 
+| Rules `context`                       | Action `event`                   | 
+|:--------------------------------------|:---------------------------------|
+| `.riskAssessment`                     | `.authentication.riskAssessment` | 
+| `.request`                            | `.request`                       | 
+| `.authorization`                      | `.authorization`                 | 
+| `.authentication`                     | `.authentication`                | 
+| `.stats`                              | `.stats`                         | 
+| `.connectionID`                       | `.connection.id`                 | 
+| `.connectionMetadata`                 | `.connection.metadata`           | 
+| `.connection`                         | `.connection.name`               | 
+| `.connectionStrategy`                 | `.connection.strategy`           | 
+| `.clientID`                           | `.client.client_id`              | 
+| `.clientName`                         | `.client.name`                   | 
+| `.clientMetadata`                     | `.client.metadata`               | 
+| `.tenant`                             | `.tenant.id`                     | 
+| `.protocol`                           | `.transaction.protocol`          |            
+| `.locale`                             | `.transaction.locale`            | 
+| `.configuration`                      | `.secrets`                       | 
+| `.sso.current_clients`                | `.session.clients`               | 
+| `.sessionID`                          | ???                              | 
+| `.auth0SessionId`                     | `.session.id`                    | 
+| `.connectionOptions.domain_aliases`   | ???                              | 
+| `.connectionOptions.tenant_domain`    | ???                              | 
+| `.jwtConfiguration.scopes`            | ???                              | 
+| `.jwtConfiguration.lifetimeInSeconds` | ???                              | 
+| `.sso.with_dbconn`                    | ???                              | 
+| `.sso.with_auth0`                     | deprecated                       | 
 
 ## Methods
 
